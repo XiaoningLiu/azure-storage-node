@@ -5859,7 +5859,7 @@ declare module azurestorage {
         * @param {LocationMode}       [options.locationMode]                      Specifies the location mode used to decide which location the request should be sent to.
         *                                                                         Please see StorageUtilities.LocationMode for the possible values.
         * @param {int}                [options.maxResults]                        Specifies the maximum number of shares to return per call to Azure storage.
-        * @param {string}             [options.include]                           Include this parameter to specify that the share's metadata be returned as part of the response body. (allowed values: '', 'metadata')
+        * @param {string}             [options.include]                           Include this parameter to specify that the share's metadata be returned as part of the response body. (allowed values: '', 'metadata', 'snapshots' or any combination of them)
         * @param {int}                [options.timeoutIntervalInMs]               The server timeout interval, in milliseconds, to use for the request.
         * @param {int}                [options.maximumExecutionTimeInMs]          The maximum execution time, in milliseconds, across all potential retries, to use when making this request.
         *                                                                         The maximum execution time interval begins at the time that the client begins building the request. The maximum
@@ -5872,7 +5872,7 @@ declare module azurestorage {
         *                                                                         `entries`  gives a list of shares and the `continuationToken` is used for the next listing operation.
         *                                                                         `response` will contain information related to this operation.
         */
-        listSharesSegmented(currentToken: common.ContinuationToken, options: FileService.ListRequestOptions, callback: ErrorOrResult<FileService.ListSharesResult>): void;
+        listSharesSegmented(currentToken: common.ContinuationToken, options: FileService.ListShareRequestOptions, callback: ErrorOrResult<FileService.ListSharesResult>): void;
         listSharesSegmented(currentToken: common.ContinuationToken, callback: ErrorOrResult<FileService.ListSharesResult>): void;
 
         /**
@@ -5886,7 +5886,7 @@ declare module azurestorage {
         *                                                                         Please see StorageUtilities.LocationMode for the possible values.
         * @param {string}             [options.prefix]                            Filters the results to return only shares whose name begins with the specified prefix.
         * @param {int}                [options.maxResults]                        Specifies the maximum number of shares to return per call to Azure storage.
-        * @param {string}             [options.include]                           Include this parameter to specify that the share's metadata be returned as part of the response body. (allowed values: '', 'metadata')
+        * @param {string}             [options.include]                           Include this parameter to specify that the share's metadata be returned as part of the response body. (allowed values: '', 'metadata', 'snapshots' or any combination of them)
         * @param {int}                [options.timeoutIntervalInMs]               The server timeout interval, in milliseconds, to use for the request.
         * @param {int}                [options.maximumExecutionTimeInMs]          The maximum execution time, in milliseconds, across all potential retries, to use when making this request.
         *                                                                         The maximum execution time interval begins at the time that the client begins building the request. The maximum
@@ -5899,7 +5899,7 @@ declare module azurestorage {
         *                                                                         `entries`  gives a list of shares and the `continuationToken` is used for the next listing operation.
         *                                                                         `response` will contain information related to this operation.
         */
-        listSharesSegmentedWithPrefix(prefix: string, currentToken: common.ContinuationToken, options: FileService.ListRequestOptions, callback: ErrorOrResult<FileService.ListSharesResult>): void;
+        listSharesSegmentedWithPrefix(prefix: string, currentToken: common.ContinuationToken, options: FileService.ListShareRequestOptions, callback: ErrorOrResult<FileService.ListSharesResult>): void;
         listSharesSegmentedWithPrefix(prefix: string, currentToken: common.ContinuationToken, callback: ErrorOrResult<FileService.ListSharesResult>): void;
 
         /**
@@ -5908,6 +5908,7 @@ declare module azurestorage {
         * @this {FileService}
         * @param {string}             share                                   The share name.
         * @param {object}             [options]                               The request options.
+        * @param {string}             [options.shareSnapshotId]               The snapshot identifier of the share.
         * @param {LocationMode}       [options.locationMode]                  Specifies the location mode used to decide which location the request should be sent to.
         *                                                                     Please see StorageUtilities.LocationMode for the possible values.
         * @param {int}                [options.timeoutIntervalInMs]           The server timeout interval, in milliseconds, to use for the request.
@@ -5951,6 +5952,9 @@ declare module azurestorage {
         createShare(share: string, options: FileService.CreateShareRequestOptions, callback: ErrorOrResult<FileService.ShareResult>): void;
         createShare(share: string, callback: ErrorOrResult<FileService.ShareResult>): void;
 
+        createShareSnapshot(share: string, options: common.RequestOptions, callback: ErrorOrResult<string>): void;        
+        createShareSnapshot(share: string, callback: ErrorOrResult<string>): void;
+
         /**
         * Creates a new share under the specified account if the share does not exists.
         *
@@ -5992,6 +5996,7 @@ declare module azurestorage {
         * @this {FileService}
         * @param {string}             share                               The share name.
         * @param {object}             [options]                           The request options.
+        * @param {string}             [options.shareSnapshotId]           The snapshot identifier of the share.
         * @param {LocationMode}       [options.locationMode]              Specifies the location mode used to decide which location the request should be sent to.
         *                                                                 Please see StorageUtilities.LocationMode for the possible values.
         * @param {int}                [options.timeoutIntervalInMs]       The server timeout interval, in milliseconds, to use for the request.
@@ -6006,7 +6011,7 @@ declare module azurestorage {
         *                                                                 information for the share.
         *                                                                 `response` will contain information related to this operation.
         */
-        getShareProperties(share: string, options: common.RequestOptions, callback: ErrorOrResult<FileService.ShareResult>): void;
+        getShareProperties(share: string, options: FileService.FileServiceOptions, callback: ErrorOrResult<FileService.ShareResult>): void;
         getShareProperties(share: string, callback: ErrorOrResult<FileService.ShareResult>): void;
 
         /**
@@ -6059,6 +6064,7 @@ declare module azurestorage {
         * @this {FileService}
         * @param {string}             share                                     The share name.
         * @param {object}             [options]                                 The request options.
+        * @param {string}             [options.shareSnapshotId]                 The snapshot identifier of the share.
         * @param {LocationMode}       [options.locationMode]                    Specifies the location mode used to decide which location the request should be sent to.
         *                                                                       Please see StorageUtilities.LocationMode for the possible values.
         * @param {int}                [options.timeoutIntervalInMs]             The server timeout interval, in milliseconds, to use for the request.
@@ -6073,7 +6079,7 @@ declare module azurestorage {
         *                                                                       information for the share.
         *                                                                       `response` will contain information related to this operation.
         */
-        getShareMetadata(share: string, options: common.RequestOptions, callback: ErrorOrResult<FileService.ShareResult>): void;
+        getShareMetadata(share: string, options: FileService.FileServiceOptions, callback: ErrorOrResult<FileService.ShareResult>): void;
         getShareMetadata(share: string, callback: ErrorOrResult<FileService.ShareResult>): void;
 
         /**
@@ -6108,6 +6114,8 @@ declare module azurestorage {
         * @this {FileService}
         * @param {string}             share                               The share name.
         * @param {object}             [options]                           The request options.
+        * @param {string}             [options.deleteSnapshots]           The snapshot delete option. See azure.FileUtilities.ShareSnapshotDeleteOptions.*. 
+        * @param {string}             [options.shareSnapshotId]           The snapshot identifier of the share.
         * @param {LocationMode}       [options.locationMode]              Specifies the location mode used to decide which location the request should be sent to.
         *                                                                 Please see StorageUtilities.LocationMode for the possible values.
         * @param {int}                [options.timeoutIntervalInMs]       The server timeout interval, in milliseconds, to use for the request.
@@ -6154,6 +6162,8 @@ declare module azurestorage {
         * @this {FileService}
         * @param {string}             share                               The share name.
         * @param {object}             [options]                           The request options.
+        * @param {string}             [options.deleteSnapshots]           The snapshot delete option. See azure.FileUtilities.ShareSnapshotDeleteOptions.*. 
+        * @param {string}             [options.shareSnapshotId]           The snapshot identifier of the share.
         * @param {LocationMode}       [options.locationMode]              Specifies the location mode used to decide which location the request should be sent to.
         *                                                                 Please see StorageUtilities.LocationMode for the possible values.
         * @param {int}                [options.timeoutIntervalInMs]       The server timeout interval, in milliseconds, to use for the request.
@@ -6167,7 +6177,7 @@ declare module azurestorage {
         *                                                                 if an error occurs; otherwise
         *                                                                 `response` will contain information related to this operation.
         */
-        deleteShare(share: string, options: common.RequestOptions, callback: ErrorOrResponse): void;
+        deleteShare(share: string, options: FileService.DeleteShareOptions, callback: ErrorOrResponse): void;
         deleteShare(share: string, callback: ErrorOrResponse): void;
 
         /**
@@ -6192,7 +6202,7 @@ declare module azurestorage {
         *                                                                 did not exist.
         *                                                                 `response` will contain information related to this operation.
         */
-        deleteShareIfExists(share: string, options: common.RequestOptions, callback: ErrorOrResult<boolean>): void;
+        deleteShareIfExists(share: string, options: FileService.DeleteShareOptions, callback: ErrorOrResult<boolean>): void;
         deleteShareIfExists(share: string, callback: ErrorOrResult<boolean>): void;
 
         /**
@@ -6202,6 +6212,7 @@ declare module azurestorage {
         * @param {string}             share                                   The share name.
         * @param {string}             directory                               The directory name. Use '' to refer to the base directory.
         * @param {object}             [options]                               The request options.
+        * @param {string}             [options.shareSnapshotId]               The snapshot identifier of the share.
         * @param {LocationMode}       [options.locationMode]                  Specifies the location mode used to decide which location the request should be sent to.
         *                                                                     Please see StorageUtilities.LocationMode for the possible values.
         * @param {int}                [options.timeoutIntervalInMs]           The server timeout interval, in milliseconds, to use for the request.
@@ -6216,7 +6227,7 @@ declare module azurestorage {
         *                                                                     be true if the directory exists, or false if the directory does not exist.
         *                                                                     `response` will contain information related to this operation.
         */
-        doesDirectoryExist(share: string, directory: string, options: common.RequestOptions, callback: ErrorOrResult<FileService.DirectoryResult>): void;
+        doesDirectoryExist(share: string, directory: string, options: FileService.FileServiceOptions, callback: ErrorOrResult<FileService.DirectoryResult>): void;
         doesDirectoryExist(share: string, directory: string, callback: ErrorOrResult<FileService.DirectoryResult>): void;
 
         /**
@@ -6285,6 +6296,7 @@ declare module azurestorage {
         * @param {string}             share                               The share name.
         * @param {string}             directory                           The directory name. Use '' to refer to the base directory.
         * @param {object}             [options]                           The request options.
+        * @param {string}             [options.shareSnapshotId]           The snapshot identifier of the share.
         * @param {LocationMode}       [options.locationMode]              Specifies the location mode used to decide which location the request should be sent to.
         *                                                                 Please see StorageUtilities.LocationMode for the possible values.
         * @param {int}                [options.timeoutIntervalInMs]       The server timeout interval, in milliseconds, to use for the request.
@@ -6299,7 +6311,7 @@ declare module azurestorage {
         *                                                                 information for the directory.
         *                                                                 `response` will contain information related to this operation.
         */
-        getDirectoryProperties(share: string, directory: string, options: common.RequestOptions, callback: ErrorOrResult<FileService.DirectoryResult>): void;
+        getDirectoryProperties(share: string, directory: string, options: FileService.FileServiceOptions, callback: ErrorOrResult<FileService.DirectoryResult>): void;
         getDirectoryProperties(share: string, directory: string, callback: ErrorOrResult<FileService.DirectoryResult>): void;
 
         /**
@@ -6358,6 +6370,7 @@ declare module azurestorage {
         * @param {string}             directory                         The directory name. Use '' to refer to the base directory.
         * @param {object}             currentToken                      A continuation token returned by a previous listing operation. Please use 'null' or 'undefined' if this is the first operation.
         * @param {object}             [options]                         The request options.
+        * @param {string}             [options.shareSnapshotId]         The snapshot identifier of the share.
         * @param {int}                [options.maxResults]              Specifies the maximum number of files to return per call to Azure ServiceClient. This does NOT affect list size returned by this function. (maximum: 5000)
         * @param {LocationMode}       [options.locationMode]            Specifies the location mode used to decide which location the request should be sent to.
         *                                                               Please see StorageUtilities.LocationMode for the possible values.
@@ -6386,6 +6399,7 @@ declare module azurestorage {
         * @param {string}             prefix                            The prefix of the directory/files name.
         * @param {object}             currentToken                      A continuation token returned by a previous listing operation. Please use 'null' or 'undefined' if this is the first operation.
         * @param {object}             [options]                         The request options.
+        * @param {string}             [options.shareSnapshotId]         The snapshot identifier of the share.
         * @param {int}                [options.maxResults]              Specifies the maximum number of files to return per call to Azure ServiceClient. This does NOT affect list size returned by this function. (maximum: 5000)
         * @param {LocationMode}       [options.locationMode]            Specifies the location mode used to decide which location the request should be sent to.
         *                                                               Please see StorageUtilities.LocationMode for the possible values.
@@ -6410,6 +6424,8 @@ declare module azurestorage {
         * @this {FileService}
         * @param {string}             share                                       The share name.
         * @param {string}             directory                                   The directory name. Use '' to refer to the base directory.
+        * @param {object}             [options]                                   The request options.
+        * @param {string}             [options.shareSnapshotId]                   The snapshot identifier of the share.
         * @param {int}                [options.timeoutIntervalInMs]               The server timeout interval, in milliseconds, to use for the request.
         * @param {int}                [options.maximumExecutionTimeInMs]          The maximum execution time, in milliseconds, across all potential retries, to use when making this request.
         *                                                                         The maximum execution time interval begins at the time that the client begins building the request. The maximum
@@ -6422,7 +6438,7 @@ declare module azurestorage {
         *                                                                         information about the file.
         *                                                                         `response` will contain information related to this operation.
         */
-        getDirectoryMetadata(share: string, directory: string, options: common.RequestOptions, callback: ErrorOrResult<FileService.DirectoryResult>): void;
+        getDirectoryMetadata(share: string, directory: string, options: FileService.FileServiceOptions, callback: ErrorOrResult<FileService.DirectoryResult>): void;
         getDirectoryMetadata(share: string, directory: string, callback: ErrorOrResult<FileService.DirectoryResult>): void;
 
         /**
@@ -6501,13 +6517,14 @@ declare module azurestorage {
         * @param {string}                   [file]                   The file name. File names may not start or end with the delimiter '/'.
         * @param {string}                   [sasToken]               The Shared Access Signature token.
         * @param {boolean}                  [primary]                A boolean representing whether to use the primary or the secondary endpoint.
+        * @param {boolean}                  [shareSnapshotId]        The snapshot identifier of the share.
         * @return {string}                                           The formatted URL string.
         * @example
         * var azure = require('azure-storage');
         * var FileService = azure.createFileService();
         * var url = FileService.getUrl(shareName, directoryName, fileName, sasToken, true);
         */
-        getUrl(share: string, directory: string, file?: string, sasToken?: string, primary?: boolean): string;
+        getUrl(share: string, directory: string, file?: string, sasToken?: string, primary?: boolean, shareSnapshotId?: string): string;
 
         /**
         * Returns all user-defined metadata, standard HTTP properties, and system properties for the file.
@@ -6518,6 +6535,7 @@ declare module azurestorage {
         * @param {string}             directory                                   The directory name. Use '' to refer to the base directory.
         * @param {string}             file                                        The file name. File names may not start or end with the delimiter '/'.
         * @param {object}             [options]                                   The request options.
+        * @param {string}             [options.shareSnapshotId]                   The snapshot identifier of the share.
         * @param {LocationMode}       [options.locationMode]                      Specifies the location mode used to decide which location the request should be sent to.
         *                                                                         Please see StorageUtilities.LocationMode for the possible values.
         * @param {int}                [options.timeoutIntervalInMs]               The server timeout interval, in milliseconds, to use for the request.
@@ -6532,7 +6550,7 @@ declare module azurestorage {
         *                                                                         information about the file.
         *                                                                         `response` will contain information related to this operation.
         */
-        getFileProperties(share: string, directory: string, file: string, options: common.RequestOptions, callback: ErrorOrResult<FileService.FileResult>): void;
+        getFileProperties(share: string, directory: string, file: string, options: FileService.FileServiceOptions, callback: ErrorOrResult<FileService.FileResult>): void;
         getFileProperties(share: string, directory: string, file: string, callback: ErrorOrResult<FileService.FileResult>): void;
 
         /**
@@ -6543,6 +6561,8 @@ declare module azurestorage {
         * @param {string}             share                                       The share name.
         * @param {string}             directory                                   The directory name. Use '' to refer to the base directory.
         * @param {string}             file                                        The file name. File names may not start or end with the delimiter '/'.
+        * @param {object}             [options]                                   The request options.
+        * @param {string}             [options.shareSnapshotId]                   The snapshot identifier of the share.
         * @param {LocationMode}       [options.locationMode]                      Specifies the location mode used to decide which location the request should be sent to.
         *                                                                         Please see StorageUtilities.LocationMode for the possible values.
         * @param {int}                [options.timeoutIntervalInMs]               The server timeout interval, in milliseconds, to use for the request.
@@ -6557,7 +6577,7 @@ declare module azurestorage {
         *                                                                         information about the file.
         *                                                                         `response` will contain information related to this operation.
         */
-        getFileMetadata(share: string, directory: string, file: string, options: common.RequestOptions, callback: ErrorOrResult<FileService.FileResult>): void;
+        getFileMetadata(share: string, directory: string, file: string, options: FileService.FileServiceOptions, callback: ErrorOrResult<FileService.FileResult>): void;
         getFileMetadata(share: string, directory: string, file: string, callback: ErrorOrResult<FileService.FileResult>): void;
 
         /**
@@ -6653,6 +6673,7 @@ declare module azurestorage {
         * @param {string}             directory                               The directory name. Use '' to refer to the base directory.
         * @param {string}             file                                    The file name. File names may not start or end with the delimiter '/'.
         * @param {object}             [options]                               The request options.
+        * @param {string}             [options.shareSnapshotId]               The snapshot identifier of the share.
         * @param {LocationMode}       [options.locationMode]                  Specifies the location mode used to decide which location the request should be sent to.
         *                                                                     Please see StorageUtilities.LocationMode for the possible values.
         * @param {int}                [options.timeoutIntervalInMs]           The server timeout interval, in milliseconds, to use for the request.
@@ -6667,7 +6688,7 @@ declare module azurestorage {
         *                                                                     be true if the file exists, or false if the file does not exist.
         *                                                                     `response` will contain information related to this operation.
         */
-        doesFileExist(share: string, directory: string, file: string, options: common.RequestOptions, callback: ErrorOrResult<FileService.FileResult>): void;
+        doesFileExist(share: string, directory: string, file: string, options: FileService.FileServiceOptions, callback: ErrorOrResult<FileService.FileResult>): void;
         doesFileExist(share: string, directory: string, file: string, callback: ErrorOrResult<FileService.FileResult>): void;
 
         /**
@@ -6761,6 +6782,7 @@ declare module azurestorage {
         * @param {string}             directory                                   The directory name. Use '' to refer to the base directory.
         * @param {string}             file                                        The file name. File names may not start or end with the delimiter '/'.
         * @param {object}             [options]                                   The request options.
+        * @param {string}             [options.shareSnapshotId]                   The snapshot identifier of the share.
         * @param {int}                [options.rangeStart]                        The range start.
         * @param {int}                [options.rangeEnd]                          The range end.
         * @param {boolean}            [options.disableContentMD5Validation]       When set to true, MD5 validation will be disabled when downloading files.
@@ -6790,6 +6812,7 @@ declare module azurestorage {
         * @param {string}             file                                        The file name. File names may not start or end with the delimiter '/'.
         * @param {string}             localFileName                               The local path to the file to be downloaded.
         * @param {object}             [options]                                   The request options.
+        * @param {string}             [options.shareSnapshotId]                   The snapshot identifier of the share.
         * @param {string}             [options.rangeStart]                        Return only the bytes of the file in the specified range.
         * @param {string}             [options.rangeEnd]                          Return only the bytes of the file in the specified range.
         * @param {boolean}            [options.useTransactionalMD5]               When set to true, Calculate and send/validate content MD5 for transactions.
@@ -6825,6 +6848,7 @@ declare module azurestorage {
         * @param {string}             directory                                   The directory name. Use '' to refer to the base directory.
         * @param {string}             file                                        The file name. File names may not start or end with the delimiter '/'.
         * @param {object}             [options]                                   The request options.
+        * @param {string}             [options.shareSnapshotId]                   The snapshot identifier of the share.
         * @param {string}             [options.rangeStart]                        Return only the bytes of the file in the specified range.
         * @param {string}             [options.rangeEnd]                          Return only the bytes of the file in the specified range.
         * @param {boolean}            [options.useTransactionalMD5]               When set to true, Calculate and send/validate content MD5 for transactions.
@@ -6860,6 +6884,7 @@ declare module azurestorage {
         * @param {string}             file                                        The file name. File names may not start or end with the delimiter '/'.
         * @param {Stream}             writeStream                                 The write stream.
         * @param {object}             [options]                                   The request options.
+        * @param {string}             [options.shareSnapshotId]                   The snapshot identifier of the share.
         * @param {string}             [options.rangeStart]                        Return only the bytes of the file in the specified range.
         * @param {string}             [options.rangeEnd]                          Return only the bytes of the file in the specified range.
         * @param {boolean}            [options.useTransactionalMD5]               When set to true, Calculate and send/validate content MD5 for transactions.
@@ -6897,6 +6922,7 @@ declare module azurestorage {
         * @param {string}             directory                                   The directory name. Use '' to refer to the base directory.
         * @param {string}             file                                        The file name. File names may not start or end with the delimiter '/'.
         * @param {object}             [options]                                   The request options.
+        * @param {string}             [options.shareSnapshotId]                   The snapshot identifier of the share.
         * @param {int}                [options.rangeStart]                        The range start.
         * @param {int}                [options.rangeEnd]                          The range end.
         * @param {LocationMode}       [options.locationMode]                      Specifies the location mode used to decide which location the request should be sent to.
@@ -7337,12 +7363,20 @@ declare module azurestorage {
           quota: number
         }
 
-        export interface ListRangeRequestOptions extends common.RequestOptions {
+        export interface FileServiceOptions extends common.RequestOptions {
+          shareSnapshotId?: string;
+        }
+
+        export interface DeleteShareOptions extends FileServiceOptions {
+          deleteSnapshots?: string;
+        }
+
+        export interface ListRangeRequestOptions extends FileServiceOptions {
           rangeStart?: number;
           rangeEnd?: number;
         }
 
-        export interface GetFileRequestOptions extends common.RequestOptions {
+        export interface GetFileRequestOptions extends FileServiceOptions {
           parallelOperationThreadCount?: number;
           rangeStart?: number;
           rangeEnd?: number;
@@ -7350,7 +7384,12 @@ declare module azurestorage {
           disableContentMD5Validation?: boolean;
         }
 
-        export interface ListRequestOptions extends common.RequestOptions {
+        export interface ListRequestOptions extends FileServiceOptions {
+          maxResults?: number;
+          include?: string;
+        }
+
+        export interface ListShareRequestOptions extends common.RequestOptions {
           maxResults?: number;
           include?: string;
         }
@@ -7457,6 +7496,10 @@ declare module azurestorage {
           OFF: string;
           SHARE: string;
           FILE: string;
+        };
+
+        var ShareSnapshotDeleteOptions: {
+          SHARE_AND_SNAPSHOTS: string
         };
       }
     }
