@@ -34,7 +34,7 @@ var Constants = azure.Constants;
 var FileUtilities = azure.FileUtilities;
 var HttpConstants = Constants.HttpConstants;
 
-var shareNamesPrefix = 'share-test-sharesnapshot-';
+var shareNamesPrefix = 'share-test-snapshot-';
 
 var fileService;
 var shareName;
@@ -105,6 +105,14 @@ describe('FileShare', function () {
   after(function (done) {
     try { fs.unlinkSync(downloadFileName); } catch (e) {}
     suite.teardownSuite(done);
+  });
+
+  beforeEach(function (done) {
+    suite.setupTest(done);
+  });
+
+  afterEach(function (done) {
+    suite.teardownTest(done);
   });
 
   describe('createShare', function () {
