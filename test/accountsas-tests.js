@@ -1438,7 +1438,7 @@ describe('azure', function () {
       assert.equal(sasQueryString[QueryStringConstants.SIGNED_PROTOCOL], sharedAccessPolicy.AccessPolicy.Protocols);
       assert.equal(sasQueryString[QueryStringConstants.SIGNED_IP], sharedAccessPolicy.AccessPolicy.IPAddressOrRange);
       assert.equal(sasQueryString[QueryStringConstants.SIGNED_VERSION], HeaderConstants.TARGET_STORAGE_VERSION);
-      assert.equal(sasQueryString[QueryStringConstants.SIGNATURE], '7VtSRqLUacnKpNF0JJQSj1Ql8mvCKDdAtgH9azXc8L8=');
+      assert.equal(sasQueryString[QueryStringConstants.SIGNATURE], 'vmnBAxuS5EqsyEOCpSbS7HxGXoBcNgf4rL5x9pmVwEA=');
 
       process.env[StorageServiceClientConstants.EnvironmentVariables.AZURE_STORAGE_CONNECTION_STRING] = connString;
       done();
@@ -1470,7 +1470,7 @@ describe('azure', function () {
       assert.equal(sasQueryString[QueryStringConstants.SIGNED_PROTOCOL], sharedAccessPolicy.AccessPolicy.Protocols);
       assert.equal(sasQueryString[QueryStringConstants.SIGNED_IP], sharedAccessPolicy.AccessPolicy.IPAddressOrRange);
       assert.equal(sasQueryString[QueryStringConstants.SIGNED_VERSION], HeaderConstants.TARGET_STORAGE_VERSION);
-      assert.equal(sasQueryString[QueryStringConstants.SIGNATURE], '7VtSRqLUacnKpNF0JJQSj1Ql8mvCKDdAtgH9azXc8L8=');
+      assert.equal(sasQueryString[QueryStringConstants.SIGNATURE], 'vmnBAxuS5EqsyEOCpSbS7HxGXoBcNgf4rL5x9pmVwEA=');
       
       done();
     });
