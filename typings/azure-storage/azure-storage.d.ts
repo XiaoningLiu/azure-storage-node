@@ -5923,7 +5923,7 @@ declare module azurestorage {
         *                                                                     be true if the share exists, or false if the share does not exist.
         *                                                                     `response` will contain information related to this operation.
         */
-        doesShareExist(share: string, options: common.RequestOptions, callback: ErrorOrResult<FileService.ShareResult>): void;
+        doesShareExist(share: string, options: FileService.FileServiceOptions, callback: ErrorOrResult<FileService.ShareResult>): void;
         doesShareExist(share: string, callback: ErrorOrResult<FileService.ShareResult>): void;
 
         /**
