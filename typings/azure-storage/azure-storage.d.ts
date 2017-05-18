@@ -601,7 +601,7 @@ declare module azurestorage {
           * @this {BlobService}
           * @param {string}             container                         The container name.
           * @param {object}             currentToken                      A continuation token returned by a previous listing operation. Please use 'null' or 'undefined' if this is the first operation.
-          * @param {errorOrResult}  callback                              `error` will contain information
+          * @param {errorOrResult}      callback                          `error` will contain information
           *                                                               if an error occurs; otherwise `result` will contain `entries` and `continuationToken`.
           *                                                               `entries`  gives a list of blobs and the `continuationToken` is used for the next listing operation.
           *                                                               `response` will contain information related to this operation.
@@ -617,7 +617,7 @@ declare module azurestorage {
           * @param {object}             [options]                         The request options.
           * @param {string}             [options.delimiter]               Delimiter, i.e. '/', for specifying folder hierarchy.
           * @param {int}                [options.maxResults]              Specifies the maximum number of blobs to return per call to Azure ServiceClient. This does NOT affect list size returned by this function. (maximum: 5000)
-          * @param {string}             [options.include]                 Specifies that the response should include one or more of the following subsets: '', 'metadata', 'snapshots', 'uncommittedblobs'). Multiple values can be added separated with a comma (,)
+          * @param {string}             [options.include]                 Specifies that the response should include one or more of the following subsets: '', 'metadata', 'snapshots', 'uncommittedblobs', 'copy', 'deleted'). Multiple values can be added separated with a comma (,)
           * @param {LocationMode}       [options.locationMode]            Specifies the location mode used to decide which location the request should be sent to.
           *                                                               Please see StorageUtilities.LocationMode for the possible values.
           * @param {int}                [options.timeoutIntervalInMs]     The server timeout interval, in milliseconds, to use for the request.
@@ -640,7 +640,7 @@ declare module azurestorage {
           * @param {string}             container                         The container name.
           * @param {string}             prefix                            The prefix of the blob name.
           * @param {object}             currentToken                      A continuation token returned by a previous listing operation. Please use 'null' or 'undefined' if this is the first operation.
-          * @param {errorOrResult}  callback                              `error` will contain information
+          * @param {errorOrResult}      callback                          `error` will contain information
           *                                                               if an error occurs; otherwise `result` will contain
           *                                                               the entries of blobs and the continuation token for the next listing operation.
           *                                                               `response` will contain information related to this operation.
@@ -657,7 +657,7 @@ declare module azurestorage {
           * @param {object}             [options]                         The request options.
           * @param {string}             [options.delimiter]               Delimiter, i.e. '/', for specifying folder hierarchy.
           * @param {int}                [options.maxResults]              Specifies the maximum number of blobs to return per call to Azure ServiceClient. This does NOT affect list size returned by this function. (maximum: 5000)
-          * @param {string}             [options.include]                 Specifies that the response should include one or more of the following subsets: '', 'metadata', 'snapshots', 'uncommittedblobs'). Multiple values can be added separated with a comma (,)
+          * @param {string}             [options.include]                 Specifies that the response should include one or more of the following subsets: '', 'metadata', 'snapshots', 'uncommittedblobs', 'copy', 'deleted'). Multiple values can be added separated with a comma (,)
           * @param {LocationMode}       [options.locationMode]            Specifies the location mode used to decide which location the request should be sent to.
           *                                                               Please see StorageUtilities.LocationMode for the possible values.
           * @param {int}                [options.timeoutIntervalInMs]     The server timeout interval, in milliseconds, to use for the request.
@@ -1197,7 +1197,7 @@ declare module azurestorage {
           * @this {BlobService}
           * @param {string}             container                                   The container name.
           * @param {string}             blob                                        The blob name.
-          * @param {errorOrResponse}  callback                                      `error` will contain information
+          * @param {errorOrResponse}    callback                                    `error` will contain information
           *                                                                         if an error occurs; `response` will contain information related to this operation.
           */
           deleteBlob(container: string, blob: string, callback: ErrorOrResponse): void;
@@ -1208,6 +1208,7 @@ declare module azurestorage {
           * or to delete only the snapshots but not the blob itself. If the blob has snapshots, you must include the deleteSnapshots option or the blob service will return an error
           * and nothing will be deleted.
           * If you are deleting a specific snapshot using the snapshotId option, the deleteSnapshots option must NOT be included.
+          * Set the deleteType option to permanently delete soft-deleted blob or snapshots, but specified blob and/or snapshots should be soft deleted first.
           *
           * @this {BlobService}
           * @param {string}             container                                   The container name.
@@ -1215,6 +1216,8 @@ declare module azurestorage {
           * @param {object}             [options]                                   The request options.
           * @param {string}             [options.deleteSnapshots]                   The snapshot delete option. See azure.BlobUtilities.SnapshotDeleteOptions.*.
           * @param {string}             [options.snapshotId]                        The snapshot identifier.
+          * @param {string}             [options.deleteType]                        The blob and snapshots delete type. See azure.BlobUtilities.DeleteTypes.*. 
+          *                                                                         Specifies the specified blob and/or associated snapshots should be permanently deleted. Specified blob and/or snapshots should be soft deleted first.
           * @param {string}             [options.leaseId]                           The lease identifier.
           * @param {AccessConditions}   [options.accessConditions]                  The access conditions.
           * @param {LocationMode}       [options.locationMode]                      Specifies the location mode used to decide which location the request should be sent to.
@@ -1229,6 +1232,31 @@ declare module azurestorage {
           *                                                                         if an error occurs; `response` will contain information related to this operation.
           */
           deleteBlob(container: string, blob: string, options: BlobService.DeleteBlobRequestOptions, callback: ErrorOrResponse): void;
+
+          /**
+          * The undelete Blob operation restores the contents and metadata of soft deleted blob or snapshot.
+          * Attempting to undelete a blob or snapshot that is not soft deleted will succeed without any changes.
+          * 
+          * @this {BlobService}
+          * @param {string}             container                                   The container name.
+          * @param {string}             blob                                        The blob name.
+          * @param {object}             [options]                                   The request options.
+          * @param {AccessConditions}   [options.accessConditions]                  The access conditions.
+          * @param {LocationMode}       [options.locationMode]                      Specifies the location mode used to decide which location the request should be sent to. 
+          *                                                                         Please see StorageUtilities.LocationMode for the possible values.
+          * @param {int}                [options.timeoutIntervalInMs]               The server timeout interval, in milliseconds, to use for the request.
+          * @param {int}                [options.clientRequestTimeoutInMs]          The timeout of client requests, in milliseconds, to use for the request.
+          * @param {int}                [options.maximumExecutionTimeInMs]          The maximum execution time, in milliseconds, across all potential retries, to use when making this request.
+          *                                                                         The maximum execution time interval begins at the time that the client begins building the request. The maximum
+          *                                                                         execution time is checked intermittently while performing requests, and before executing retries.
+          * @param {string}             [options.clientRequestId]                   A string that represents the client request ID with a 1KB character limit.
+          * @param {bool}               [options.useNagleAlgorithm]                 Determines whether the Nagle algorithm is used; true to use the Nagle algorithm; otherwise, false.
+          *                                                                         The default value is false.
+          * @param {errorOrResponse}    callback                                    `error` will contain information
+          *                                                                         if an error occurs; `response` will contain information related to this operation.
+          */
+          undeleteBlob(container: string, blob: string, callback: ErrorOrResponse): void;
+          undeleteBlob(container: string, blob: string, options: BlobService.ConditionalRequestOption, callback: ErrorOrResponse): void;
 
           /**
           * Marks the specified blob or snapshot for deletion if it exists. The blob is later deleted during garbage collection.
@@ -1254,6 +1282,7 @@ declare module azurestorage {
           * or to delete only the snapshots but not the blob itself. If the blob has snapshots, you must include the deleteSnapshots option or the blob service will return an error
           * and nothing will be deleted.
           * If you are deleting a specific snapshot using the snapshotId option, the deleteSnapshots option must NOT be included.
+          * Set the deleteType option to permanently delete soft-deleted blob or snapshots, but specified blob and/or snapshots should be soft deleted first.
           *
           * @this {BlobService}
           * @param {string}             container                           The container name.
@@ -1261,6 +1290,8 @@ declare module azurestorage {
           * @param {object}             [options]                           The request options.
           * @param {string}             [options.deleteSnapshots]           The snapshot delete option. See azure.BlobUtilities.SnapshotDeleteOptions.*.
           * @param {string}             [options.snapshotId]                The snapshot identifier.
+          * @param {string}             [options.deleteType]                The blob and snapshots delete type. See azure.BlobUtilities.DeleteTypes.*. 
+          *                                                                 Specifies the specified blob and/or associated snapshots should be permanently deleted. Specified blob and/or snapshots should be soft deleted first.          
           * @param {string}             [options.leaseId]                   The lease identifier.
           * @param {AccessConditions}   [options.accessConditions]          The access conditions.
           * @param {LocationMode}       [options.locationMode]              Specifies the location mode used to decide which location the request should be sent to.
@@ -2605,6 +2636,7 @@ declare module azurestorage {
           export interface BlobResult {
             name: string;
             snapshot?: string;
+            deleted?: boolean;
             container: string;
             metadata?: { [key: string]: string; };
             etag: string;
@@ -2617,6 +2649,8 @@ declare module azurestorage {
             contentRange?: string;
             committedBlockCount?: string;
             serverEncrypted?: string;
+            deletedTime?: string;
+            remainingRetentionDays?: string;
             appendOffset? : string;
             contentSettings?: {
               contentType?: string;
@@ -2705,6 +2739,7 @@ declare module azurestorage {
 
           export interface DeleteBlobRequestOptions extends BlobRequestOptions {
             deleteSnapshots?: string;
+            deleteType?: string;
           }
 
           export interface CreateBlobRequestOptions extends BlobRequestOptions {
@@ -2767,10 +2802,15 @@ declare module azurestorage {
             SNAPSHOTS: string;
             METADATA: string;
             UNCOMMITTED_BLOBS: string;
+            COPY: string;
+            DELETED: string;
           };
           SnapshotDeleteOptions: {
             SNAPSHOTS_ONLY: string;
             BLOB_AND_SNAPSHOTS: string;
+          };
+          DeleteTypes : {
+            PERMANENT: string;
           };
           BlockListFilter: {
             ALL: string;
@@ -7513,6 +7553,8 @@ declare module azurestorage {
           ALLOWED_HEADERS_ELEMENT: string;
           INCLUDE_APIS_ELEMENT: string;
           DEFAULT_SERVICE_VERSION_ELEMENT: string;
+          DEFAULT_DELETE_RETENTION_POLICY_ELEMENT: string;
+          DEFAULT_RETAINED_VERSIONS_PER_BLOB_ELEMENT: string;
         };
         /**
         * Defines constants for use with blob operations.
@@ -8478,9 +8520,15 @@ declare module azurestorage {
           Write: boolean;
           RetentionPolicy: RetentionPolicy;
         }
+        export interface DeleteRetentionPolicyProperties {
+          Enabled: boolean;
+          Days: number;
+          RetainedVersionsPerBlob: number;
+        }
         export interface ServiceProperties {
           DefaultServiceVersion?: string;
           Logging?: LoggingProperties;
+          DeleteRetentionPolicy?: DeleteRetentionPolicyProperties;
           HourMetrics?: MetricsProperties;
           MinuteMetrics?: MetricsProperties;
           Cors?: {
