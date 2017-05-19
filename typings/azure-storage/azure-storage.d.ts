@@ -7302,6 +7302,7 @@ declare module azurestorage {
 
         export interface ShareResult {
           name: string;
+          snapshot?: string;
           etag: string;
           lastModified: string;
           metadata?: { [key: string]: string; };
