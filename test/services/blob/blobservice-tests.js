@@ -1189,12 +1189,18 @@ describe('BlobService', function () {
   });
 
   describe('softdeleteOperations', function () {
+    var containerName = testutil.generateId(containerNamesPrefix, containerNames, suite.isMocked);
+    var blobName = testutil.generateId(blobNamesPrefix, blobNames, suite.isMocked);
+    var blobText = 'Hello World!';
+    var softdeleteDays = 1;
+    var softdeleteRetainedVersionsPerBlob = 5;
+
     before(function (done) {
       var properties = {
         DeleteRetentionPolicy: {
           Enabled: true,
-          Days: 1,
-          RetainedVersionsPerBlob: 5
+          Days: softdeleteDays,
+          RetainedVersionsPerBlob: softdeleteRetainedVersionsPerBlob
         }
       };
 
@@ -1206,8 +1212,8 @@ describe('BlobService', function () {
           assert.ok(properties);
           assert.ok(properties.DeleteRetentionPolicy);
           assert.equal(properties.DeleteRetentionPolicy.Enabled, true);
-          assert.equal(properties.DeleteRetentionPolicy.Days, 1);
-          assert.equal(properties.DeleteRetentionPolicy.RetainedVersionsPerBlob, 5);
+          assert.equal(properties.DeleteRetentionPolicy.Days, softdeleteDays);
+          assert.equal(properties.DeleteRetentionPolicy.RetainedVersionsPerBlob, softdeleteRetainedVersionsPerBlob);
 
           setTimeout(function () { // Wait for server taking effect
             done();
@@ -1236,10 +1242,6 @@ describe('BlobService', function () {
       });
     });
 
-    var containerName = testutil.generateId(containerNamesPrefix, containerNames, suite.isMocked);
-    var blobName = testutil.generateId(blobNamesPrefix, blobNames, suite.isMocked);
-    var blobText = 'Hello World!';
-
     beforeEach(function (done) {
       containerName = testutil.generateId(containerNamesPrefix, containerNames, suite.isMocked);
       blobName = testutil.generateId(blobNamesPrefix, blobNames, suite.isMocked);
@@ -1262,6 +1264,23 @@ describe('BlobService', function () {
       blobService.deleteContainerIfExists(containerName, function (error) {
         assert.equal(error, null);
         done();
+      });
+    });
+
+    it('listBlobsSegmented should display soft deleted blob properties', function (done) {
+      blobService.deleteBlob(containerName, blobName, function (error, response) {
+        assert.equal(error, null);
+
+        blobService.listBlobsSegmented(containerName, null, { include: BlobUtilities.BlobListingDetails.DELETED }, function (error, result) {
+          assert.equal(error, null);
+          assert.equal(result.entries.length, 1);
+          assert.notEqual(result.entries[0], undefined);
+          assert.equal(result.entries[0].deleted, true);
+          assert.equal(result.entries[0].remainingRetentionDays === softdeleteDays || result.entries[0].remainingRetentionDays === softdeleteDays - 1, true);
+          assert.notEqual(result.entries[0].deletedTime, undefined);
+          assert.equal(result.entries[0].deletedTime.length > 0, true);
+          done();
+        });
       });
     });
 
@@ -1305,7 +1324,7 @@ describe('BlobService', function () {
       });
     });
 
-    it('listBlobsSegmented should display modified blob and snapshots', function (done) {
+    it('listBlobsSegmented should display auto generated snapshot by write protection', function (done) {
       blobService.createBlockBlobFromText(containerName, blobName, "New Content", function (error, response) {
         assert.equal(error, null);
 
@@ -1313,7 +1332,24 @@ describe('BlobService', function () {
         blobService.listBlobsSegmented(containerName, null, { include: includeOption }, function (error, result) {
           assert.equal(error, null);
           assert.equal(result.entries.length, 2);
-          done();
+
+          for (var i = 0; i < result.entries.length; i++) {
+            var entry = result.entries[i];
+            if (entry.snapshot) {
+              var snapId = entry.snapshot;
+            }
+          }
+          assert.notEqual(typeof snapId, 'undefined');
+
+          blobService.undeleteBlob(containerName, blobName, function (error, response) {
+            assert.equal(error, null);
+
+            blobService.getBlobToText(containerName, blobName, { snapshotId: snapId }, function (error, text) {
+              assert.equal(error, null);
+              assert.equal(text, blobText);
+              done();
+            });
+          });
         });
       });
     });
@@ -1326,7 +1362,7 @@ describe('BlobService', function () {
           assert.equal(error, null);
           assert.equal(result.entries.length, 1);
 
-          blobService.deleteBlob(containerName, blobName, { deleteType: BlobUtilities.DeleteTypes.PERMANENT }, function (error, response) {
+          blobService.deleteBlob(containerName, blobName, { isPermanentDelete: true }, function (error, response) {
             assert.equal(error, null);
 
             blobService.listBlobsSegmented(containerName, null, { include: BlobUtilities.BlobListingDetails.DELETED }, function (error, result) {
@@ -1357,7 +1393,7 @@ describe('BlobService', function () {
 
               blobService.deleteBlob(containerName, blobName, {
                 deleteSnapshots: BlobUtilities.SnapshotDeleteOptions.BLOB_AND_SNAPSHOTS,
-                deleteType: BlobUtilities.DeleteTypes.PERMANENT
+                isPermanentDelete: true
               }, function (error, response) {
                 assert.equal(error, null);
 
@@ -1394,7 +1430,7 @@ describe('BlobService', function () {
 
               blobService.deleteBlob(containerName, blobName, {
                 snapshotId: snapshotID,
-                deleteType: BlobUtilities.DeleteTypes.PERMANENT
+                isPermanentDelete: true
               }, function (error, response) {
                 assert.equal(error, null);
 
@@ -1415,7 +1451,7 @@ describe('BlobService', function () {
         assert.equal(error, null);
         assert.equal(result.entries.length, 1);
 
-        blobService.deleteBlob(containerName, blobName, { deleteType: BlobUtilities.DeleteTypes.PERMANENT }, function (error, response) {
+        blobService.deleteBlob(containerName, blobName, { isPermanentDelete: true }, function (error, response) {
           assert.notEqual(error, null);
           done();
         });
@@ -1434,7 +1470,7 @@ describe('BlobService', function () {
 
           blobService.deleteBlob(containerName, blobName, {
             snapshotId: snapshotID,
-            deleteType: BlobUtilities.DeleteTypes.PERMANENT
+            isPermanentDelete: true
           }, function (error, response) {
             assert.notEqual(error, null);
             done();
@@ -1457,7 +1493,12 @@ describe('BlobService', function () {
             blobService.listBlobsSegmented(containerName, null, function (error, result) {
               assert.equal(error, null);
               assert.equal(result.entries.length, 1);
-              done();
+
+              blobService.getBlobToText(containerName, blobName, function (error, text) {
+                assert.equal(error, null);
+                assert.equal(text, blobText);
+                done();                
+              });
             });
           });
         });
@@ -1786,7 +1827,7 @@ describe('BlobService', function () {
         assert.strictEqual(parsedUrl.port, '80');
         assert.strictEqual(parsedUrl.hostname, 'host.com');
         assert.strictEqual(parsedUrl.pathname, '/' + containerName + '/' + blobName);
-        assert.strictEqual(parsedUrl.query, 'se=2011-10-12T11%3A53%3A40Z&spr=https&sv=2016-05-31&sr=b&sig=5ubgzWFxfpW857DpF5QVK9HNbewzuQHjvwB%2BlGEdubM%3D');
+        assert.strictEqual(parsedUrl.query, 'se=2011-10-12T11%3A53%3A40Z&spr=https&sv=2017-04-17&sr=b&sig=A7y9u890HRxG0XSEsRntrGJ7WIzwrXC5ttro2KFOySU%3D');
 
         blobUrl = blobServiceassert.getUrl(containerName, blobName, sasToken, false, '2016-10-11T11:03:40Z');
 
@@ -1795,7 +1836,7 @@ describe('BlobService', function () {
         assert.strictEqual(parsedUrl.port, '80');
         assert.strictEqual(parsedUrl.hostname, 'host-secondary.com');
         assert.strictEqual(parsedUrl.pathname, '/' + containerName + '/' + blobName);
-        assert.strictEqual(parsedUrl.query, 'se=2011-10-12T11%3A53%3A40Z&spr=https&sv=2016-05-31&sr=b&sig=5ubgzWFxfpW857DpF5QVK9HNbewzuQHjvwB%2BlGEdubM%3D&snapshot=2016-10-11T11%3A03%3A40Z');
+        assert.strictEqual(parsedUrl.query, 'se=2011-10-12T11%3A53%3A40Z&spr=https&sv=2017-04-17&sr=b&sig=A7y9u890HRxG0XSEsRntrGJ7WIzwrXC5ttro2KFOySU%3D&snapshot=2016-10-11T11%3A03%3A40Z');
 
         done();
       });
@@ -1876,7 +1917,7 @@ describe('BlobService', function () {
       assert.equal(sasQueryString[QueryStringConstants.SIGNED_PERMISSIONS], BlobUtilities.SharedAccessPermissions.READ);
       assert.equal(sasQueryString[QueryStringConstants.SIGNED_PROTOCOL], 'https');
       assert.equal(sasQueryString[QueryStringConstants.SIGNED_VERSION], HeaderConstants.TARGET_STORAGE_VERSION);
-      assert.equal(sasQueryString[QueryStringConstants.SIGNATURE], 'JM+OTBtD7HFVD3A/I5r/iE0HlW8yLcv7DMQoqDT/rtw=');
+      assert.equal(sasQueryString[QueryStringConstants.SIGNATURE], 'Qa15RHcYQIkyLGqQgvf5qbHesBnK5Uzjgzzpo92vCXc=');
 
       done();
     });

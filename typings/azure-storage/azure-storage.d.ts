@@ -159,6 +159,7 @@ declare module azurestorage {
           /**
           * Sets the properties of a storage account’s Blob service, including Azure Storage Analytics.
           * You can also use this operation to set the default request version for all incoming requests that do not have a version specified.
+          * When you set blob service properties (such as enabling soft delete), it may take up to 30 seconds to take effect.
           *
           * @this {BlobService}
           * @param {object}             serviceProperties                        The service properties.
@@ -1208,7 +1209,7 @@ declare module azurestorage {
           * or to delete only the snapshots but not the blob itself. If the blob has snapshots, you must include the deleteSnapshots option or the blob service will return an error
           * and nothing will be deleted.
           * If you are deleting a specific snapshot using the snapshotId option, the deleteSnapshots option must NOT be included.
-          * Set the deleteType option to permanently delete soft-deleted blob or snapshots, but specified blob and/or snapshots should be soft deleted first.
+          * Set the isPermanentDelete option to permanently delete soft-deleted blob or snapshots, but specified blob and/or snapshots should be soft deleted first.
           *
           * @this {BlobService}
           * @param {string}             container                                   The container name.
@@ -1216,8 +1217,7 @@ declare module azurestorage {
           * @param {object}             [options]                                   The request options.
           * @param {string}             [options.deleteSnapshots]                   The snapshot delete option. See azure.BlobUtilities.SnapshotDeleteOptions.*.
           * @param {string}             [options.snapshotId]                        The snapshot identifier.
-          * @param {string}             [options.deleteType]                        The blob and snapshots delete type. See azure.BlobUtilities.DeleteTypes.*. 
-          *                                                                         Specifies the specified blob and/or associated snapshots should be permanently deleted. Specified blob and/or snapshots should be soft deleted first.
+          * @param {string}             [options.isPermanentDelete]                 Specifies the specified blob and/or associated snapshots should be permanently deleted. Specified blob and/or snapshots should be soft deleted first.
           * @param {string}             [options.leaseId]                           The lease identifier.
           * @param {AccessConditions}   [options.accessConditions]                  The access conditions.
           * @param {LocationMode}       [options.locationMode]                      Specifies the location mode used to decide which location the request should be sent to.
@@ -1228,7 +1228,7 @@ declare module azurestorage {
           *                                                                         execution time is checked intermittently while performing requests, and before executing retries.
           * @param {bool}               [options.useNagleAlgorithm]                 Determines whether the Nagle algorithm is used; true to use the Nagle algorithm; otherwise, false.
           *                                                                         The default value is false.
-          * @param {errorOrResponse}  callback                                      `error` will contain information
+          * @param {errorOrResponse}    callback                                      `error` will contain information
           *                                                                         if an error occurs; `response` will contain information related to this operation.
           */
           deleteBlob(container: string, blob: string, options: BlobService.DeleteBlobRequestOptions, callback: ErrorOrResponse): void;
@@ -1282,7 +1282,7 @@ declare module azurestorage {
           * or to delete only the snapshots but not the blob itself. If the blob has snapshots, you must include the deleteSnapshots option or the blob service will return an error
           * and nothing will be deleted.
           * If you are deleting a specific snapshot using the snapshotId option, the deleteSnapshots option must NOT be included.
-          * Set the deleteType option to permanently delete soft-deleted blob or snapshots, but specified blob and/or snapshots should be soft deleted first.
+          * Set the isPermanentDelete option to permanently delete soft-deleted blob or snapshots, but specified blob and/or snapshots should be soft deleted first.
           *
           * @this {BlobService}
           * @param {string}             container                           The container name.
@@ -1290,8 +1290,7 @@ declare module azurestorage {
           * @param {object}             [options]                           The request options.
           * @param {string}             [options.deleteSnapshots]           The snapshot delete option. See azure.BlobUtilities.SnapshotDeleteOptions.*.
           * @param {string}             [options.snapshotId]                The snapshot identifier.
-          * @param {string}             [options.deleteType]                The blob and snapshots delete type. See azure.BlobUtilities.DeleteTypes.*. 
-          *                                                                 Specifies the specified blob and/or associated snapshots should be permanently deleted. Specified blob and/or snapshots should be soft deleted first.          
+          * @param {string}             [options.isPermanentDelete]         Specifies the specified blob and/or associated snapshots should be permanently deleted. Specified blob and/or snapshots should be soft deleted first.
           * @param {string}             [options.leaseId]                   The lease identifier.
           * @param {AccessConditions}   [options.accessConditions]          The access conditions.
           * @param {LocationMode}       [options.locationMode]              Specifies the location mode used to decide which location the request should be sent to.
@@ -2739,7 +2738,7 @@ declare module azurestorage {
 
           export interface DeleteBlobRequestOptions extends BlobRequestOptions {
             deleteSnapshots?: string;
-            deleteType?: string;
+            isPermanentDelete?: boolean;
           }
 
           export interface CreateBlobRequestOptions extends BlobRequestOptions {
@@ -8522,8 +8521,8 @@ declare module azurestorage {
         }
         export interface DeleteRetentionPolicyProperties {
           Enabled: boolean;
-          Days: number;
-          RetainedVersionsPerBlob: number;
+          Days?: number;
+          RetainedVersionsPerBlob?: number;
         }
         export interface ServiceProperties {
           DefaultServiceVersion?: string;
