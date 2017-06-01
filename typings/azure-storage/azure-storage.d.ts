@@ -177,7 +177,31 @@ declare module azurestorage {
           */
           setServiceProperties(serviceProperties: common.models.ServicePropertiesResult.ServiceProperties, options: common.RequestOptions, callback: ErrorOrResponse): void;
           setServiceProperties(serviceProperties: common.models.ServicePropertiesResult.ServiceProperties, callback: ErrorOrResponse): void;
-          
+
+          /**
+          * Sets the tier of a blockblob under a blob storage LRS account, or the tier of a pageblob under a premium storage account.
+          *
+          * @this {BlobService}
+          * @param {string}             container                                The container name.
+          * @param {string}             blob                                     The blob name.
+          * @param {string}             blobTier                                 Please see BlobUtilities.BlockBlobTier or BlobUtilities.PageBlobTier for possible values.
+          * @param {LocationMode}       [options.locationMode]                   Specifies the location mode used to decide which location the request should be sent to. 
+          *                                                                      Please see StorageUtilities.LocationMode for the possible values.
+          * @param {int}                [options.timeoutIntervalInMs]            The server timeout interval, in milliseconds, to use for the request.
+          * @param {int}                [options.clientRequestTimeoutInMs]       The timeout of client requests, in milliseconds, to use for the request.
+          * @param {int}                [options.maximumExecutionTimeInMs]       The maximum execution time, in milliseconds, across all potential retries, to use when making this request.
+          *                                                                      The maximum execution time interval begins at the time that the client begins building the request. The maximum
+          *                                                                      execution time is checked intermittently while performing requests, and before executing retries.
+          * @param {string}             [options.clientRequestId]                A string that represents the client request ID with a 1KB character limit.
+          * @param {bool}               [options.useNagleAlgorithm]              Determines whether the Nagle algorithm is used; true to use the Nagle algorithm; otherwise, false.
+          *                                                                      The default value is false.
+          * @param {errorOrResponse}    callback                                 `error` will contain information
+          *                                                                      if an error occurs; otherwise, `response`
+          *                                                                      will contain information related to this operation.
+          */
+          setBlobTier(container: string, blob: string, blobTier: string, options: common.RequestOptions, callback: ErrorOrResponse): void;
+          setBlobTier(container: string, blob: string, blobTier: string, callback: ErrorOrResponse): void;
+
           /**
           * Lists a segment containing a collection of container items under the specified account.
           *
@@ -1349,6 +1373,7 @@ declare module azurestorage {
           * @param {string}             targetContainer                           The target container name.
           * @param {string}             targetBlob                                The target blob name.
           * @param {object}             [options]                                 The request options.
+          * @param {string}             [options.pageBlobTier]                    For page blobs on premium accounts only. Set the tier of target blob. Refer to BlobUtilities.PageBlobTier.
           * @param {string}             [options.snapshotId]                      The source blob snapshot identifier.
           * @param {object}             [options.metadata]                        The target blob metadata key/value pairs.
           * @param {string}             [options.leaseId]                         The target blob lease identifier.
@@ -1474,6 +1499,7 @@ declare module azurestorage {
           * @param {bool}               [options.storeBlobContentMD5]                   Specifies whether the blob's ContentMD5 header should be set on uploads.
           *                                                                             The default value is false for page blobs.
           * @param {bool}               [options.useTransactionalMD5]                   Calculate and send/validate content MD5 for transactions.
+          * @param {string}             [options.pageBlobTier]                          For page blobs on premium accounts only. Set the tier of the target blob. Refer to BlobUtilities.PageBlobTier.
           * @param {string}             [options.contentSettings.contentType]           The MIME content type of the blob. The default type is application/octet-stream.
           * @param {string}             [options.contentSettings.contentEncoding]       The content encodings that have been applied to the blob.
           * @param {string}             [options.contentSettings.contentLanguage]       The natural languages used by this resource.
@@ -1512,6 +1538,7 @@ declare module azurestorage {
           * @param {bool}               [options.storeBlobContentMD5]                   Specifies whether the blob's ContentMD5 header should be set on uploads.
           *                                                                             The default value is false for page blobs.
           * @param {bool}               [options.useTransactionalMD5]                   Calculate and send/validate content MD5 for transactions.
+          * @param {string}             [options.pageBlobTier]                          For page blobs on premium accounts only. Set the tier of the target blob. Refer to BlobUtilities.PageBlobTier.
           * @param {string}             [options.contentSettings.contentType]           The MIME content type of the blob. The default type is application/octet-stream.
           * @param {string}             [options.contentSettings.contentEncoding]       The content encodings that have been applied to the blob.
           * @param {string}             [options.contentSettings.contentLanguage]       The natural languages used by this resource.
@@ -1594,6 +1621,7 @@ declare module azurestorage {
           * @param {bool}               [options.storeBlobContentMD5]                   Specifies whether the blob's ContentMD5 header should be set on uploads.
           *                                                                             The default value is false for page blobs and true for block blobs.
           * @param {bool}               [options.useTransactionalMD5]                   Calculate and send/validate content MD5 for transactions.
+          * @param {string}             [options.pageBlobTier]                          For page blobs on premium accounts only. Set the tier of the target blob. Refer to BlobUtilities.PageBlobTier.
           * @param {string}             [options.contentSettings.contentType]           The MIME content type of the blob. The default type is application/octet-stream.
           * @param {string}             [options.contentSettings.contentEncoding]       The content encodings that have been applied to the blob.
           * @param {string}             [options.contentSettings.contentLanguage]       The natural languages used by this resource.
@@ -2611,6 +2639,9 @@ declare module azurestorage {
             lastModified: string;
             contentLength: string;
             blobType: string;
+            accessTier?: string;
+            archiveStatus?: string;
+            accessTierInferred?: string;
             isIncrementalCopy?: boolean;
             requestId: string;
             sequenceNumber?: string;
@@ -2649,6 +2680,7 @@ declare module azurestorage {
             metadata?: Object;
             leaseId?: string;
             transactionalContentMD5?: string;
+            pageBlobTier?: string;
             contentSettings?: {
               contentType?: string;
               contentEncoding?: string;
@@ -2786,6 +2818,21 @@ declare module azurestorage {
             MAX: string;
             UPDATE: string;
             INCREMENT: string;
+          };
+          BlockBlobTier: {
+            HOT: string;
+            COOL: string;
+            ARCHIVE: string;
+          };
+          PageBlobTier: {
+            P4: string;
+            P6: string;
+            P10: string;
+            P20: string;
+            P30: string;
+            P40: string;
+            P50: string;
+            P60: string;
           };
         };
       }
