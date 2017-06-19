@@ -1,5 +1,9 @@
 Note: This is the change log file for Azure Storage JavaScript Client Library.
 
+2017.06 Version 0.2.2-preview.6
+* Added browser-specific APIs for blobs and files uploading.
+* Dropped dependency to browserify-fs.
+
 2017.05 Version 0.2.1-preview.4
 
 * Reduced footprint of the generated JavaScript files
