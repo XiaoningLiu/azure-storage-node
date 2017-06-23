@@ -20,7 +20,6 @@ var fs = require('fs');
 // Lib includes
 var testutil = require('../../framework/util');
 var SR = testutil.libRequire('common/util/sr');
-var azureutil = testutil.libRequire('/common/util/util');
 var TestSuite = require('../../framework/test-suite');
 var errors = testutil.libRequire('common/errors/errors');
 var ArgumentError = errors.ArgumentError;
@@ -496,7 +495,7 @@ describe('FileShare', function () {
             assert.equal(result.name, fileName);
 
             
-            var exists = azureutil.pathExistsSync(downloadFileName);
+            var exists = fs.existsSync(downloadFileName);
             assert.equal(exists, true);
 
             fs.readFile(downloadFileName, function (error, text) {
@@ -516,7 +515,7 @@ describe('FileShare', function () {
             assert.equal(result.name, fileName);
 
             
-            var exists = azureutil.pathExistsSync(downloadFileName);
+            var exists = fs.existsSync(downloadFileName);
             assert.equal(exists, true);
 
             fs.readFile(downloadFileName, function (error, text) {
