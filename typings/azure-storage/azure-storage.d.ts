@@ -1141,7 +1141,7 @@ declare module azurestorage {
           * @param {errorOrResult}  callback                                        `error` will contain information if an error occurs;
           *                                                                         otherwise `result` will contain the blob information.
           *                                                                         `response` will contain information related to this operation.
-          * @return {Stream}
+          * @return {Readable}                                                      A Node.js Readable stream.
           * @example
           * var azure = require('azure-storage');
           * var blobService = azure.createBlobService();
@@ -1157,8 +1157,8 @@ declare module azurestorage {
           * @this {BlobService}
           * @param {string}             container                                   The container name.
           * @param {string}             blob                                        The blob name.
-          * @param {Stream}             writeStream                                 The write stream.
-          * @param {errorOrResult}  callback                                        `error` will contain information if an error occurs;
+          * @param {Writable}           writeStream                                 The Node.js Writable stream.
+          * @param {errorOrResult}      callback                                    `error` will contain information if an error occurs;
           *                                                                         otherwise `result` will contain the blob information.
           *                                                                         `response` will contain information related to this operation.
           * @return {SpeedSummary}
@@ -1180,7 +1180,7 @@ declare module azurestorage {
           * @this {BlobService}
           * @param {string}             container                                   The container name.
           * @param {string}             blob                                        The blob name.
-          * @param {Stream}             writeStream                                 The write stream.
+          * @param {Writable}           writeStream                                 The Node.js Writable stream.
           * @param {Object}             [options]                                   The request options.
           * @param {string}             [options.snapshotId]                        The snapshot identifier.
           * @param {string}             [options.leaseId]                           The lease identifier.
@@ -1709,7 +1709,7 @@ declare module azurestorage {
           *                                                                             if an error occurs; otherwise `[result]{@link BlobResult}` will contain
           *                                                                             the blob information.
           *                                                                             `response` will contain information related to this operation.
-          * @return {Stream}
+          * @return {Writable}                                                          A Node.js Writable stream.
           * @example
           * var azure = require('azure-storage');
           * var blobService = azure.createBlobService();
@@ -1758,7 +1758,7 @@ declare module azurestorage {
           *                                                                             if an error occurs; otherwise `[result]{@link BlobResult}` will contain
           *                                                                             the blob information.
           *                                                                             `response` will contain information related to this operation.
-          * @return {Stream}
+          * @return {Writable}                                                          A Node.js Writable stream.
           * @example
           * var azure = require('azure-storage');
           * var blobService = azure.createBlobService();
@@ -1776,7 +1776,7 @@ declare module azurestorage {
           * @this {BlobService}
           * @param {string}             container                                   The container name.
           * @param {string}             blob                                        The blob name.
-          * @param {Stream}             readStream                                  The read stream.
+          * @param {Readable}           readStream                                  The Node.js Readable stream.
           * @param {int}                rangeStart                                  The range start.
           * @param {int}                rangeEnd                                    The range end.
           * @param {Object}             [options]                                   The request options.
@@ -2130,7 +2130,7 @@ declare module azurestorage {
           *                                                                             if an error occurs; otherwise `result` will contain
           *                                                                             information about the blob.
           *                                                                             `response` will contain information related to this operation.
-          * @return {Stream}
+          * @return {Writable}                                                          A Node.js Writable stream. 
           * @example
           * var azure = require('azure-storage');
           * var blobService = azure.createBlobService();
@@ -2146,7 +2146,7 @@ declare module azurestorage {
           * @param {string}             blockId                                   The block identifier.
           * @param {string}             container                                 The container name.
           * @param {string}             blob                                      The blob name.
-          * @param {Stream}             readStream                                The read stream.
+          * @param {Readable}           readStream                                The Node.js Readable stream.
           * @param {int}                streamLength                              The stream length.
           * @param {Object}             [options]                                 The request options.
           * @param {bool}               [options.useTransactionalMD5]             Calculate and send/validate content MD5 for transactions.
@@ -2543,7 +2543,7 @@ declare module azurestorage {
           *                                                                           if an error occurs; otherwise `result` will contain
           *                                                                           information about the blob.
           *                                                                           `response` will contain information related to this operation.
-          * @return {Stream}
+          * @return {Writable}                                                        A Node.js Writable stream.
           * @example
           * var azure = require('azure-storage');
           * var blobService = azure.createBlobService();
@@ -2590,7 +2590,7 @@ declare module azurestorage {
           *                                                                           if an error occurs; otherwise `result` will contain
           *                                                                           information about the blob.
           *                                                                           `response` will contain information related to this operation.
-          * @return {Stream}
+          * @return {Writable}                                                        A Node.js Writable stream.
           * @example
           * var azure = require('azure-storage');
           * var blobService = azure.createBlobService();
@@ -2765,7 +2765,7 @@ declare module azurestorage {
           * @this {BlobService}
           * @param {string}             container                                 The container name.
           * @param {string}             blob                                      The blob name.
-          * @param {Stream}             readStream                                The read stream.
+          * @param {Readable}           readStream                                The Node.js Readable stream.
           * @param {int}                streamLength                              The stream length.
           * @param {Object}             [options]                                 The request options.
           * @param {bool}               [options.absorbConditionalErrorsOnRetry]  Specifies whether to absorb the conditional error on retry.
@@ -6979,7 +6979,7 @@ declare module azurestorage {
         * @param {errorOrResult}      callback                                    `error` will contain information if an error occurs;
         *                                                                         otherwise `result` will contain the file information.
         *                                                                         `response` will contain information related to this operation.
-        * @return {Stream}
+        * @return {Readable}                                                      A Node.js Readable stream.
         * @example
         * var azure = require('azure-storage');
         * var fileService = azure.createFileService();
@@ -6996,7 +6996,7 @@ declare module azurestorage {
         * @param {string}             share                                       The share name.
         * @param {string}             directory                                   The directory name. Use '' to refer to the base directory.
         * @param {string}             file                                        The file name. File names may not start or end with the delimiter '/'.
-        * @param {Stream}             writeStream                                 The write stream.
+        * @param {Writable}           writeStream                                 The Node.js Writable stream.
         * @param {Object}             [options]                                   The request options.
         * @param {string}             [options.shareSnapshotId]                   The snapshot identifier of the share.
         * @param {string}             [options.rangeStart]                        Return only the bytes of the file in the specified range.
@@ -7090,7 +7090,7 @@ declare module azurestorage {
         * @param {string}             share                                       The share name.
         * @param {string}             directory                                   The directory name. Use '' to refer to the base directory.
         * @param {string}             file                                        The file name. File names may not start or end with the delimiter '/'.
-        * @param {Stream}             readStream                                  The read stream.
+        * @param {Readable}           readStream                                  The Node.js Readable stream.
         * @param {int}                rangeStart                                  The range start.
         * @param {int}                rangeEnd                                    The range end.
         * @param {Object}             [options]                                   The request options.
@@ -7295,7 +7295,7 @@ declare module azurestorage {
         * @param {bool}               [options.useNagleAlgorithm]                   Determines whether the Nagle algorithm is used; true to use the Nagle algorithm; otherwise, false.
         *                                                                           The default value is false.
         * @param {errorOrResult}      callback                                      The callback function.
-        * @return {Stream}
+        * @return {Writable}                                                        A Node.js Writable stream.
         * @example
         * var azure = require('azure-storage');
         * var FileService = azure.createFileService();
@@ -7339,7 +7339,7 @@ declare module azurestorage {
         * @param {bool}               [options.useNagleAlgorithm]                   Determines whether the Nagle algorithm is used; true to use the Nagle algorithm; otherwise, false.
         *                                                                           The default value is false.
         * @param {errorOrResult}      callback                                      The callback function.
-        * @return {Stream}
+        * @return {Writable}                                                        A Node.js Writable stream.
         * @example
         * var azure = require('azure-storage');
         * var FileService = azure.createFileService();
