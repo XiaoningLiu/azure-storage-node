@@ -1,9 +1,18 @@
 Note: This is an Azure Storage only package. The all up Azure node sdk still has the old storage bits in there. In a future release, those storage bits will be removed and an npm dependency to this storage node sdk will 
 be taken. This is a GA release and the changes described below indicate the changes from the Azure node SDK 0.9.8 available here - https://github.com/Azure/azure-sdk-for-node.
 
+2018.05 Version 2.9.0
+
+ALL
+* Updated storage service version to 2017-11-09.
+
 BLOB
+* Add ```createBlobServiceWithBearerToken()``` to create ```BlobService``` object with bearer tokens such as OAuth access token.
 * Added support for '$web' as a valid blob container name for static website.
 * Added `progress` event for `SpeedSummary` class, which will be triggered when every progress updates.
+
+QUEUE
+* Add ```createQueueServiceWithBearerToken()``` to create ```QueueService``` object with bearer tokens such as OAuth access token.
 
 2018.04 Version 2.8.2
 
