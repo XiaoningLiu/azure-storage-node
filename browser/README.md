@@ -36,6 +36,16 @@ Above JavaScript files are all [UMD compatible](https://github.com/umdjs/umd). Y
 
 Compatibility with mobile browsers have not been fully validated, please open issues when you get errors.
 
+# Running Tests against Browsers
+
+Running tests against Chrome by default. The Storage Account should be configured with CORS support before running test. Please see above online samples about how to configure CORS rules for an account.
+
+```
+set AZURE_STORAGE_CONNECTION_STRING="valid storage connection string"
+npm install
+npm run jstest
+```
+
 ## Generating a Custom Azure Storage JavaScript Client Library
 
 If you wish to customize the library and generate the Azure Storage JavaScript Client Library, you can follow the following steps.
