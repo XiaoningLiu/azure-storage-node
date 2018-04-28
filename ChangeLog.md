@@ -6,6 +6,7 @@ ALL
 
 BLOB
 * Add ```createBlobServiceWithBearerToken()``` to create ```BlobService``` object with bearer tokens such as OAuth access token.
+* Support '$web' as a valid blob container name for static website.
 
 QUEUE
 * Add ```createQueueServiceWithBearerToken()``` to create ```QueueService``` object with bearer tokens such as OAuth access token.
