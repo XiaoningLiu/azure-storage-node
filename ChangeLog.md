@@ -3,6 +3,7 @@ be taken. This is a GA release and the changes described below indicate the chan
 
 BLOB
 * Added support for '$web' as a valid blob container name for static website.
+* Added `progress` event for `SpeedSummary` class, which will be triggered when every progress updates.
 
 2018.04 Version 2.8.2
 
