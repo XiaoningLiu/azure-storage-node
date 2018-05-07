@@ -5,10 +5,11 @@ ALL
 * Updated storage service version to 2017-11-09.
 
 BLOB
-* Add ```createBlobServiceWithBearerToken()``` to create ```BlobService``` object with bearer tokens such as OAuth access token.
+* Added ```createBlobServiceWithBearerToken()``` to create ```BlobService``` object with bearer tokens such as OAuth access token.
+* Added support for write-once read-many containers.
 
 QUEUE
-* Add ```createQueueServiceWithBearerToken()``` to create ```QueueService``` object with bearer tokens such as OAuth access token.
+* Added ```createQueueServiceWithBearerToken()``` to create ```QueueService``` object with bearer tokens such as OAuth access token.
 
 2018.04 Version 2.8.2
 
