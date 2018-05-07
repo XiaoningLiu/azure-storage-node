@@ -5,14 +5,15 @@ be taken. This is a GA release and the changes described below indicate the chan
 
 ALL
 * Updated storage service version to 2017-11-09.
+* Added `progress` event for `SpeedSummary` class, which will be triggered when every progress updates.
 
 BLOB
 * Add ```createBlobServiceWithBearerToken()``` to create ```BlobService``` object with bearer tokens such as OAuth access token.
 * Added support for '$web' as a valid blob container name for static website.
-* Added `progress` event for `SpeedSummary` class, which will be triggered when every progress updates.
+* Added support for write-once read-many containers.
 
 QUEUE
-* Add ```createQueueServiceWithBearerToken()``` to create ```QueueService``` object with bearer tokens such as OAuth access token.
+* Added ```createQueueServiceWithBearerToken()``` to create ```QueueService``` object with bearer tokens such as OAuth access token.
 
 2018.04 Version 2.8.2
 
