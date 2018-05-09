@@ -1061,7 +1061,7 @@ describe('tableservice-tests', function () {
         assert.strictEqual(parsedUrl.port, '80');
         assert.strictEqual(parsedUrl.hostname, 'host.com');
         assert.strictEqual(parsedUrl.pathname, '/' + tableName);
-        assert.strictEqual(parsedUrl.query, 'se=2016-10-12T11%3A53%3A40Z&sp=r&spr=https&sv=2017-07-29&tn=table1&sig=nGTS9JG336F7HUmfLaZMXehsycnNFnRVPXK%2FKOEn8o0%3D');
+        assert.strictEqual(parsedUrl.query, 'se=2016-10-12T11%3A53%3A40Z&sp=r&spr=https&sv=2018-03-28&tn=table1&sig=nOx6W2719RbdqG2owNYPs9w%2Bj8SC4A5wOaPT%2FLDe83o%3D');
         done();
     });
 
@@ -1085,7 +1085,7 @@ describe('tableservice-tests', function () {
         assert.strictEqual(parsedUrl.port, '80');
         assert.strictEqual(parsedUrl.hostname, 'host.com');
         assert.strictEqual(parsedUrl.pathname, '/account1/' + tableName);
-        assert.strictEqual(parsedUrl.query, 'se=2016-10-12T11%3A53%3A40Z&sp=r&spr=https&sv=2017-07-29&tn=table1&sig=nGTS9JG336F7HUmfLaZMXehsycnNFnRVPXK%2FKOEn8o0%3D');
+        assert.strictEqual(parsedUrl.query, 'se=2016-10-12T11%3A53%3A40Z&sp=r&spr=https&sv=2018-03-28&tn=table1&sig=nOx6W2719RbdqG2owNYPs9w%2Bj8SC4A5wOaPT%2FLDe83o%3D');
         done();
     });
   });

@@ -1,8 +1,12 @@
 Note: This is an Azure Storage only package. The all up Azure node sdk still has the old storage bits in there. In a future release, those storage bits will be removed and an npm dependency to this storage node sdk will 
 be taken. This is a GA release and the changes described below indicate the changes from the Azure node SDK 0.9.8 available here - https://github.com/Azure/azure-sdk-for-node.
 
+ALL
+* Updated storage service version to 2018-03-28.
+
 BLOB
 * Added support for '$web' as a valid blob container name for static website.
+* Added support for static website service properties.
 
 2018.04 Version 2.8.2
 
