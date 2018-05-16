@@ -1357,6 +1357,45 @@ describe('BlobService', function () {
       });
     });
 
+    it('should work with sync copy', function(done) {
+      var sourceContainerName = testutil.generateId(containerNamesPrefix, containerNames, suite.isMocked);
+      var targetContainerName = testutil.generateId(containerNamesPrefix, containerNames, suite.isMocked);
+
+      var sourceBlobName = testutil.generateId(blobNamesPrefix, blobNames, suite.isMocked);
+      var targetBlobName = testutil.generateId(blobNamesPrefix, blobNames, suite.isMocked);
+
+      var blobText = 'hi there';
+
+      blobService.createContainer(sourceContainerName, function (createErr1) {
+        assert.equal(createErr1, null);
+
+        blobService.createContainer(targetContainerName, function (createErr2) {
+          assert.equal(createErr2, null);
+
+          blobService.createBlockBlobFromText(sourceContainerName, sourceBlobName, blobText, function (uploadErr, res) {
+            assert.equal(uploadErr, null);
+
+            blobService.startCopyBlob(blobService.getUrl(sourceContainerName, sourceBlobName), targetContainerName, targetBlobName, {isSyncCopy: true}, function (copyErr, copyRes, resp) {
+              assert.equal(copyErr, null);
+
+              blobService.getBlobToText(targetContainerName, targetBlobName, function (downloadErr, text) {
+                assert.equal(downloadErr, null);
+                assert.equal(text, blobText);
+
+                blobService.deleteContainer(sourceContainerName, function (deleteError) {
+                  assert.equal(deleteError, null);
+                  blobService.deleteContainer(targetContainerName, function (deleteError) {
+                    assert.equal(deleteError, null);
+                    done();
+                  });
+                });
+              });
+            });
+          });
+        });
+      });
+    });
+
     runOrSkip('incremental copy should work', function(done) {
       var sourceContainerName = testutil.generateId(containerNamesPrefix, containerNames, suite.isMocked);
       var targetContainerName = testutil.generateId(containerNamesPrefix, containerNames, suite.isMocked);
@@ -1523,7 +1562,7 @@ describe('BlobService', function () {
         assert.strictEqual(parsedUrl.port, '80');
         assert.strictEqual(parsedUrl.hostname, 'host.com');
         assert.strictEqual(parsedUrl.pathname, '/' + containerName + '/' + blobName);
-        assert.strictEqual(parsedUrl.query, 'se=2011-10-12T11%3A53%3A40Z&spr=https&sv=2017-07-29&sr=b&sig=o1TR6AHtC7jKDuMq6Y9bqOtCxTBiokFRHtKgv9VEFpQ%3D');
+        assert.strictEqual(parsedUrl.query, 'se=2011-10-12T11%3A53%3A40Z&spr=https&sv=2018-03-28&sr=b&sig=j6Ubb%2Flpyt9cd55dlfwoEGOog9a%2FyDYWhB8UscVCTo4%3D');
 
         blobUrl = blobServiceassert.getUrl(containerName, blobName, sasToken, false, '2016-10-11T11:03:40Z');
 
@@ -1532,7 +1571,7 @@ describe('BlobService', function () {
         assert.strictEqual(parsedUrl.port, '80');
         assert.strictEqual(parsedUrl.hostname, 'host-secondary.com');
         assert.strictEqual(parsedUrl.pathname, '/' + containerName + '/' + blobName);
-        assert.strictEqual(parsedUrl.query, 'se=2011-10-12T11%3A53%3A40Z&spr=https&sv=2017-07-29&sr=b&sig=o1TR6AHtC7jKDuMq6Y9bqOtCxTBiokFRHtKgv9VEFpQ%3D&snapshot=2016-10-11T11%3A03%3A40Z');
+        assert.strictEqual(parsedUrl.query, 'se=2011-10-12T11%3A53%3A40Z&spr=https&sv=2018-03-28&sr=b&sig=j6Ubb%2Flpyt9cd55dlfwoEGOog9a%2FyDYWhB8UscVCTo4%3D&snapshot=2016-10-11T11%3A03%3A40Z');
 
         done();
       });
@@ -1613,7 +1652,7 @@ describe('BlobService', function () {
       assert.equal(sasQueryString[QueryStringConstants.SIGNED_PERMISSIONS], BlobUtilities.SharedAccessPermissions.READ);
       assert.equal(sasQueryString[QueryStringConstants.SIGNED_PROTOCOL], 'https');
       assert.equal(sasQueryString[QueryStringConstants.SIGNED_VERSION], HeaderConstants.TARGET_STORAGE_VERSION);
-      assert.equal(sasQueryString[QueryStringConstants.SIGNATURE], 'b6Do7ByS97s+IVkusKmJ56h7YJQh0FNMmX9h4ps/HcE=');
+      assert.equal(sasQueryString[QueryStringConstants.SIGNATURE], '8rgGI044z+1BGRrVKaxO+u5y/pqjBSPVqC3QDEJvTUA=');
 
       done();
     });

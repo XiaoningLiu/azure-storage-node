@@ -1,5 +1,8 @@
 Note: This is the change log file for Azure Storage JavaScript Client Library.
 
+BLOB
+* Added support for synchronous copy of block blobs and put block from URL.
+
 2018.04 Version 2.8.100+2.8.2
 
 * Fixed a bug that retry policy will not retry for XHR error in browsers.
