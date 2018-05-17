@@ -6,6 +6,7 @@ be taken. This is a GA release and the changes described below indicate the chan
 ALL
 * Updated storage service version to 2017-11-09.
 * Added `progress` event for `SpeedSummary` class, which will be triggered when every progress updates.
+* Bumped version of request module from ~2.83.0 to ^2.86.0 to solve a vulnerability issue.
 
 BLOB
 * Add ```createBlobServiceWithBearerToken()``` to create ```BlobService``` object with bearer tokens such as OAuth access token.
