@@ -2,7 +2,7 @@ Note: This is an Azure Storage only package. The all up Azure node sdk still has
 be taken. This is a GA release and the changes described below indicate the changes from the Azure node SDK 0.9.8 available here - https://github.com/Azure/azure-sdk-for-node.
 
 BLOB
-* Added support for synchronous copy of block blobs and put block from URL.
+* Added a method `createBlockFromURL` for `blobService`.
 
 2018.04 Version 2.8.2
 
