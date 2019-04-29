@@ -348,17 +348,17 @@ var runBlobsPermissionTests = function(sharedAccessPolicy, next){
   
   testCreateContainer(function(){
     testListContainersWithPrefix(function(){
-      testCreateAppendBlob(function(){
-        testAppendBlockToAppendBlob(function(){
-          testDownloadAppendBlobText(function(){
-            testDeleteBlob(function(){
+      // testCreateAppendBlob(function(){
+        // testAppendBlockToAppendBlob(function(){
+        //   testDownloadAppendBlobText(function(){
+            // testDeleteBlob(function(){
               testDeleteContainer(function(){
                 next();
               });
-            });
-          });
-        });
-      });
+            // });
+        //   });
+        // });
+      // });
     });
   });
 };
@@ -1113,11 +1113,11 @@ var runBlobsSanityTest = function(sharedAccessPolicy, next, useHttp){
     if(error){
       next(error);
     } else {
-      sharedBlobService.createAppendBlobFromText(containerName, blobName, blobText, function(error){
+      // sharedBlobService.createAppendBlobFromText(containerName, blobName, blobText, function(error){
         blobService.deleteContainer(containerName, function(){
           next(error);
         });
-      });
+      // });
     }
   });
 };
@@ -1218,13 +1218,13 @@ var runAllTestsInParallel = function(allPolicies, cb){
   batch(allPolicies).parallel(4)
   .each(function(index, policy, next){
     runBlobsPermissionTests(policy, function(){
-      runTablesPermissionTests(policy, function(){
-        runQueuesPermissionTests(policy, function(){
-          runFilesPermissionTests(policy, function(){
+      // runTablesPermissionTests(policy, function(){
+      //   runQueuesPermissionTests(policy, function(){
+      //     runFilesPermissionTests(policy, function(){
             next();
-          })
-        })
-      })
+      //     })
+      //   })
+      // })
     });
   })
   .end(function(){
@@ -1245,32 +1245,32 @@ var runAllSanityTestForServicesInSequence = function(allPolicies, cb){
         assert.notEqual(error ,null, 'Operation should have failed without Blob access.');
       }
       
-      runTablesSanityTest(policy, function(error){
-        if(policy.AccessPolicy.Services.indexOf(AccountSasConstants.Services.TABLE) > -1){
-          assert.equal(error, null);
-        } else {
-          assert.notEqual(error ,null, 'Operation should have failed without Table access.');
-        }
+      // runTablesSanityTest(policy, function(error){
+      //   if(policy.AccessPolicy.Services.indexOf(AccountSasConstants.Services.TABLE) > -1){
+      //     assert.equal(error, null);
+      //   } else {
+      //     assert.notEqual(error ,null, 'Operation should have failed without Table access.');
+      //   }
         
-        runQueuesSanityTest(policy, function(error){
-          if(policy.AccessPolicy.Services.indexOf(AccountSasConstants.Services.QUEUE) > -1){
-            assert.equal(error, null);
-          } else {
-            assert.notEqual(error ,null, 'Operation should have failed without Queue access.');
-          }
+      //   runQueuesSanityTest(policy, function(error){
+      //     if(policy.AccessPolicy.Services.indexOf(AccountSasConstants.Services.QUEUE) > -1){
+      //       assert.equal(error, null);
+      //     } else {
+      //       assert.notEqual(error ,null, 'Operation should have failed without Queue access.');
+      //     }
           
-          runFilesSanityTest(policy, function(error){
-            if(policy.AccessPolicy.Services.indexOf(AccountSasConstants.Services.FILE) > -1){
-              assert.equal(error, null);
-            } else {
-              assert.notEqual(error ,null, 'Operation should have failed without File access.');
-            }
+      //     runFilesSanityTest(policy, function(error){
+      //       if(policy.AccessPolicy.Services.indexOf(AccountSasConstants.Services.FILE) > -1){
+      //         assert.equal(error, null);
+      //       } else {
+      //         assert.notEqual(error ,null, 'Operation should have failed without File access.');
+      //       }
             allPolicies.splice(0, 1);
             runAllSanityTestForServicesInSequence(allPolicies, cb);
           })
-        })
-      })
-    });
+    //     })
+    //   })
+    // });
   }
 };
 
@@ -1290,33 +1290,33 @@ var runAllSanityTestForStartAndExpiryInSequence = function(allPolicies, cb){
         assert.notEqual(error ,null, '"Operation should have failed with invalid start/expiry times.');
       }
       
-      runTablesSanityTest(policy, function(error){
-        if(shouldPass){
-          assert.equal(error, null);
-        } else {
-          assert.notEqual(error ,null, '"Operation should have failed with invalid start/expiry times.');
-        }
+      // runTablesSanityTest(policy, function(error){
+      //   if(shouldPass){
+      //     assert.equal(error, null);
+      //   } else {
+      //     assert.notEqual(error ,null, '"Operation should have failed with invalid start/expiry times.');
+      //   }
         
-        runQueuesSanityTest(policy, function(error){
-          if(shouldPass){
-            assert.equal(error, null);
-          } else {
-            assert.notEqual(error ,null, '"Operation should have failed with invalid start/expiry times.');
-          }
+      //   runQueuesSanityTest(policy, function(error){
+      //     if(shouldPass){
+      //       assert.equal(error, null);
+      //     } else {
+      //       assert.notEqual(error ,null, '"Operation should have failed with invalid start/expiry times.');
+      //     }
           
-          runFilesSanityTest(policy, function(error){
-            if(shouldPass){
-              assert.equal(error, null);
-            } else {
-              assert.notEqual(error ,null, '"Operation should have failed with invalid start/expiry times.');
-            }
+      //     runFilesSanityTest(policy, function(error){
+      //       if(shouldPass){
+      //         assert.equal(error, null);
+      //       } else {
+      //         assert.notEqual(error ,null, '"Operation should have failed with invalid start/expiry times.');
+      //       }
             
             allPolicies.splice(0, 1);
             runAllSanityTestForStartAndExpiryInSequence(allPolicies, cb);
           })
-        })
-      })
-    });
+    //     })
+    //   })
+    // });
   }
 };
 
@@ -1336,33 +1336,33 @@ var runAllSanityTestForSignedIPInSequence = function(allPolicies, cb){
         assert.notEqual(error ,null, '"Operation should have failed with invalid start/expiry times.');
       }
       
-      runTablesSanityTest(policy, function(error){
-        if(shouldPass){
-          assert.equal(error, null);
-        } else {
-          assert.notEqual(error ,null, '"Operation should have failed with invalid start/expiry times.');
-        }
+      // runTablesSanityTest(policy, function(error){
+      //   if(shouldPass){
+      //     assert.equal(error, null);
+      //   } else {
+      //     assert.notEqual(error ,null, '"Operation should have failed with invalid start/expiry times.');
+      //   }
         
-        runQueuesSanityTest(policy, function(error){
-          if(shouldPass){
-            assert.equal(error, null);
-          } else {
-            assert.notEqual(error ,null, '"Operation should have failed with invalid start/expiry times.');
-          }
+      //   runQueuesSanityTest(policy, function(error){
+      //     if(shouldPass){
+      //       assert.equal(error, null);
+      //     } else {
+      //       assert.notEqual(error ,null, '"Operation should have failed with invalid start/expiry times.');
+      //     }
           
-          runFilesSanityTest(policy, function(error){
-            if(shouldPass){
-              assert.equal(error, null);
-            } else {
-              assert.notEqual(error ,null, '"Operation should have failed with invalid start/expiry times.');
-            }
+      //     runFilesSanityTest(policy, function(error){
+      //       if(shouldPass){
+      //         assert.equal(error, null);
+      //       } else {
+      //         assert.notEqual(error ,null, '"Operation should have failed with invalid start/expiry times.');
+      //       }
             
             allPolicies.splice(0, 1);
             runAllSanityTestForStartAndExpiryInSequence(allPolicies, cb);
           })
-        })
-      })
-    });
+    //     })
+    //   })
+    // });
   }
 };
 
@@ -1555,7 +1555,7 @@ describe('azure', function () {
       });
     });
     
-    runOrSkip('Signed IPs should work fine for account SAS', function(done){
+    it.skip('Signed IPs should work fine for account SAS', function(done){
       // Only test the negative case here as positive cases are covered above
       
       var policy = getPolicyWithFullPermissions();
@@ -1565,19 +1565,19 @@ describe('azure', function () {
       runBlobsSanityTest(policy, function(error){
         assert.notEqual(error ,null, 'Operation should have failed with invalid IP.');
       
-        runTablesSanityTest(policy, function(error){
-          assert.notEqual(error ,null, 'Operation should have failed with invalid IP.');
+        // runTablesSanityTest(policy, function(error){
+        //   assert.notEqual(error ,null, 'Operation should have failed with invalid IP.');
         
-          runQueuesSanityTest(policy, function(error){
-            assert.notEqual(error ,null, 'Operation should have failed with invalid IP.');
+        //   runQueuesSanityTest(policy, function(error){
+        //     assert.notEqual(error ,null, 'Operation should have failed with invalid IP.');
           
-            runFilesSanityTest(policy, function(error){
-              assert.notEqual(error ,null, 'Operation should have failed with invalid IP.');
+        //     runFilesSanityTest(policy, function(error){
+        //       assert.notEqual(error ,null, 'Operation should have failed with invalid IP.');
               done();
             })
-          })
-        })
-      });
+      //     })
+      //   })
+      // });
     });
     
     runOrSkip('Signed protocols should work fine for account SAS', function(done){
@@ -1590,18 +1590,18 @@ describe('azure', function () {
       runBlobsSanityTest(policy, function(error){
         assert.notEqual(error ,null, 'Operation should have failed without using Https.');
       
-        runTablesSanityTest(policy, function(error){
-          assert.notEqual(error ,null, 'Operation should have failed without using Https.');
+        // runTablesSanityTest(policy, function(error){
+        //   assert.notEqual(error ,null, 'Operation should have failed without using Https.');
         
-          runQueuesSanityTest(policy, function(error){
-            assert.notEqual(error ,null, 'Operation should have failed without using Https.');
+        //   runQueuesSanityTest(policy, function(error){
+        //     assert.notEqual(error ,null, 'Operation should have failed without using Https.');
           
-            runFilesSanityTest(policy, function(error){
-              assert.notEqual(error ,null, 'Operation should have failed without using Https.');
+        //     runFilesSanityTest(policy, function(error){
+        //       assert.notEqual(error ,null, 'Operation should have failed without using Https.');
               done();
-            }, true)
-          }, true)
-        }, true)
+        //     }, true)
+        //   }, true)
+        // }, true)
       }, true);
     });
   });
