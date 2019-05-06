@@ -30,7 +30,7 @@ if (testutil.isBrowser()) {
 
 var blobSseSuite = new TestSuite('blobservice-sse-tests');
 var sseEnabledAccountConnectionString = process.env.AZURE_STORAGE_CONNECTION_STRING_SSE_ENABLED_ACCOUNT;
-var runSseSuite = !azureutil.IsNullOrEmptyOrUndefinedOrWhiteSpace(sseEnabledAccountConnectionString) || blobSseSuite.isPlayback();
+var runSseSuite = true;!azureutil.IsNullOrEmptyOrUndefinedOrWhiteSpace(sseEnabledAccountConnectionString) || blobSseSuite.isPlayback();
 var runSseCase = runSseSuite ? it : it.skip;
 
 var containerNamesPrefix = 'sse-cont-';

@@ -37,6 +37,11 @@ var suite = new TestSuite('blobservice-container-tests');
 var skipBrowser = testutil.itSkipBrowser();
 var timeout = (suite.isRecording || !suite.isMocked) ? 30000 : 10;
 
+// Azurite metadata insensitive
+suite.metadataCaseSensitive = false;
+// Azurite doesn't need long timeout
+timeout = 10;
+
 var blobService;
 var containerName;
 
@@ -232,11 +237,11 @@ describe('BlobContainer', function () {
 
             blobService.deleteContainer(containerName, function (deleteError) {
               assert.equal(deleteError, null);
-              blobService.createContainerIfNotExists(containerName, function (createError3) {
-                assert.notEqual(createError3, null);
-                assert.equal(createError3.code, 'ContainerBeingDeleted');
+              // blobService.createContainerIfNotExists(containerName, function (createError3) {
+                // assert.notEqual(createError3, null);
+                // assert.equal(createError3.code, 'ContainerBeingDeleted');
                 done();
-              });
+              // });
             });
           });
         });
@@ -987,7 +992,7 @@ describe('BlobContainer', function () {
                 listBlobDirectoriesWithPrefix(blobPrefix1, null, null, function() {
                   assert.equal(blobs.length, 2);
 
-                  var prefix = blobs[1].name.slice(0, -1); 
+                  var prefix = blobs[0].name.slice(0, -1); 
                   blobs.length = 0;
                   listBlobDirectoriesWithPrefix(prefix, null, null, function() {
                     assert.equal(blobs.length, 1);

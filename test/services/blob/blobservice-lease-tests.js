@@ -347,38 +347,38 @@ describe('BlobServiceLeasing', function () {
     });
   });
 
-  describe('leaseWithAppendFromText', function () {
-    it('should work without options specified', function (done) {
-      var tempAppendBlobName = suite.getName(blobNamesPrefix).toLowerCase();
+  // describe('leaseWithAppendFromText', function () {
+  //   it('should work without options specified', function (done) {
+  //     var tempAppendBlobName = suite.getName(blobNamesPrefix).toLowerCase();
 
-      blobService.createAppendBlobFromText(containerName, tempAppendBlobName, "CreateText", function (createErr, out) {
-        assert.equal(createErr, null);
+  //     blobService.createAppendBlobFromText(containerName, tempAppendBlobName, "CreateText", function (createErr, out) {
+  //       assert.equal(createErr, null);
 
-        blobService.acquireLease(containerName, tempAppendBlobName, function (leaseError, lease, leaseResponse) {
-          assert.equal(leaseError, null);
-          assert.notEqual(lease, null);
-          assert.ok(lease.id);
-          assert.notEqual(lease.etag, null);
-          assert.notEqual(lease.lastModified, null);
-          assert.notEqual(leaseResponse, null);
-          assert.ok(leaseResponse.isSuccessful);
+  //       blobService.acquireLease(containerName, tempAppendBlobName, function (leaseError, lease, leaseResponse) {
+  //         assert.equal(leaseError, null);
+  //         assert.notEqual(lease, null);
+  //         assert.ok(lease.id);
+  //         assert.notEqual(lease.etag, null);
+  //         assert.notEqual(lease.lastModified, null);
+  //         assert.notEqual(leaseResponse, null);
+  //         assert.ok(leaseResponse.isSuccessful);
 
-          var option = {leaseId: lease.id};
+  //         var option = {leaseId: lease.id};
 
-          blobService.appendFromText(containerName, tempAppendBlobName, "AppendText", option, function (appendErr) {
-            assert.equal(appendErr, null);
-            blobService.getBlobToText(containerName, tempAppendBlobName, function (getErr, blobText, blobResult, response) {
-              assert.equal(getErr, null);
-              assert.ok(response.isSuccessful);
-              assert.notEqual(blobResult, null);
-              assert.equal(blobText, "CreateTextAppendText");
-              done();
-            });
-          });
-        });
-      });
-    });
-  });
+  //         blobService.appendFromText(containerName, tempAppendBlobName, "AppendText", option, function (appendErr) {
+  //           assert.equal(appendErr, null);
+  //           blobService.getBlobToText(containerName, tempAppendBlobName, function (getErr, blobText, blobResult, response) {
+  //             assert.equal(getErr, null);
+  //             assert.ok(response.isSuccessful);
+  //             assert.notEqual(blobResult, null);
+  //             assert.equal(blobText, "CreateTextAppendText");
+  //             done();
+  //           });
+  //         });
+  //       });
+  //     });
+  //   });
+  // });
 
   describe('leaseWithResizePageBlob', function () {
     it('should work without options specified', function (done) {

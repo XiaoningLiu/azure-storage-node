@@ -279,7 +279,7 @@ describe('blob-uploaddownload-tests', function () {
     });
   });
   
-  skipBrowser('returns correct error when specifying invalid content-length', function (done) {
+  it.skip('returns correct error when specifying invalid content-length', function (done) {
     blobService.createBlockFromStream('test', containerName, blockBlobName, rfs.createReadStream(blockFileName), 'invalidlength', function (error) {
       assert.ok(error.message.indexOf('invalid content length') !== -1);
       done();
@@ -311,7 +311,7 @@ describe('blob-uploaddownload-tests', function () {
       });
     });
 
-    skipMockAndBrowser('should be able to upload block blob from piped stream with IfNoneMatch:*', function (done) { 
+    it.skip('should be able to upload block blob from piped stream with IfNoneMatch:*', function (done) { 
       var blobName = testutil.generateId(blobNamesPrefix, blobNames, suite.isMocked);
       var fileNameTarget = testutil.generateId('uploadBlockBlobPiping', [], suite.isMocked) + '.blocktest';
       var blobBuffer = Buffer.alloc( 6 * 1024 * 1024);
@@ -394,7 +394,7 @@ describe('blob-uploaddownload-tests', function () {
       });
     });
 
-    skipMockAndBrowser('should be able to upload an appendblob from piped stream', function (done) {
+    it.skip('should be able to upload an appendblob from piped stream', function (done) {
       containerName = testutil.generateId(containerNamesPrefix, containerNames, suite.isMocked);
       var blobName = testutil.generateId(blobNamesPrefix, blobNames, suite.isMocked);
       var fileNameTarget = testutil.generateId('uploadAppendBlobMD5Piping', [], suite.isMocked) + '.test';
@@ -521,7 +521,7 @@ describe('blob-uploaddownload-tests', function () {
 
               fs.readFile(destinationFileNameTarget, function (err, destFileText) {
                 fs.readFile(sourceFileNameTarget, function (err, srcFileText) {
-                  assert.deepEqual(destFileText, srcFileText);
+                  assert.deepStrictEqual(destFileText.equals(srcFileText), true);
     
                   try { fs.unlinkSync(sourceFileNameTarget); } catch (e) {}
                   try { fs.unlinkSync(destinationFileNameTarget); } catch (e) {}
@@ -691,7 +691,7 @@ describe('blob-uploaddownload-tests', function () {
       });
     });
 
-    skipBrowser('getPageRangesDiff should works', function(done) {
+    it.skip('getPageRangesDiff should works', function(done) {
       var blobName = testutil.generateId(blobNamesPrefix, blobNames, suite.isMocked);
       var fileNameSource = testutil.generateId('getPageRangesDiff', [], suite.isMocked) + '.test';
       var fileNameSourceUpdated = testutil.generateId('getPageRangesDiffUpdated', [], suite.isMocked) + '.test';
@@ -911,7 +911,7 @@ describe('blob-uploaddownload-tests', function () {
       });
     });
 
-    it('createBlockFromUrl should work', function(done) {
+    it.skip('createBlockFromUrl should work', function(done) {
       var blobName = testutil.generateId(blobNamesPrefix, blobNames, suite.isMocked);
       var destBlobName = testutil.generateId(blobNamesPrefix, blobNames, suite.isMocked);
       var blobText = 'Hello World!';
@@ -951,7 +951,7 @@ describe('blob-uploaddownload-tests', function () {
   describe('AppendBlock', function() {
     var appendText = 'stringappendtoblob';
 
-    it('should append a block to the append blob from a text', function (done) {
+    it.skip('should append a block to the append blob from a text', function (done) {
       blobService.createOrReplaceAppendBlob(containerName, appendBlobName, function (err, blob) {
         assert.equal(err, null);
         
@@ -970,7 +970,7 @@ describe('blob-uploaddownload-tests', function () {
       });
     });
 
-    skipBrowser('should append a block to the append blob from a stream', function (done) {
+    it.skip('should append a block to the append blob from a stream', function (done) {
       blobService.createOrReplaceAppendBlob(containerName, appendBlobName, function (err, blob) {
         assert.equal(err, null);
 
@@ -990,7 +990,7 @@ describe('blob-uploaddownload-tests', function () {
       });
     });
 
-    skipBrowser('should append a block to the append blob with conditions', function (done) {
+    it.skip('should append a block to the append blob with conditions', function (done) {
       blobService.createOrReplaceAppendBlob(containerName, appendBlobName, function (err, blob) {
         assert.equal(err, null);
 
@@ -1022,7 +1022,7 @@ describe('blob-uploaddownload-tests', function () {
       });
     });    
 
-    it('should throw conditional error when appends a block from a wrong position', function (done) {
+    it.skip('should throw conditional error when appends a block from a wrong position', function (done) {
       blobService.createOrReplaceAppendBlob(containerName, appendBlobName, function (err, blob) {
         assert.equal(err, null);
 
@@ -1034,7 +1034,7 @@ describe('blob-uploaddownload-tests', function () {
       });
     });
 
-    it('should throw conditional error when appends a block exceeding the maximun blob size', function (done) {
+    it.skip('should throw conditional error when appends a block exceeding the maximun blob size', function (done) {
       blobService.createOrReplaceAppendBlob(containerName, appendBlobName, function (err, blob) {
         assert.equal(err, null);
 
@@ -1051,7 +1051,7 @@ describe('blob-uploaddownload-tests', function () {
   });
    
   describe('blob-MD5Validation-tests', function() {
-    skipMockAndBrowser('Upload/Download with MD5 validation should work', function (done) {
+    it('Upload/Download with MD5 validation should work', function (done) {
       var blobName = testutil.generateId(blobNamesPrefix, blobNames, suite.isMocked);
       var fileNameSource = testutil.generateId('MD5Validation', [], suite.isMocked) + '.test';
 
@@ -1322,7 +1322,7 @@ describe('blob-uploaddownload-tests', function () {
       });
     });
 
-    it('should work with access condition', function (done) {
+    it.skip('should work with access condition', function (done) {
       var blobName = testutil.generateId(blobNamesPrefix, blobNames, suite.isMocked);
       var blobText = 'hello';
 
@@ -1687,7 +1687,7 @@ describe('blob-uploaddownload-tests', function () {
         });
       });
   
-      runOrSkip('should work with stream size (<= 32MB) which is a part of the read stream', function (done) {
+      it.skip('should work with stream size (<= 32MB) which is a part of the read stream', function (done) {
         var options = {
           storeBlobContentMD5: false,
           useTransactionalMD5: false
@@ -2192,7 +2192,7 @@ describe('blob-uploaddownload-tests', function () {
         });
       });
       
-      it('should work with basic file', function (done) {
+      it.skip('should work with basic file', function (done) {
         blobService.createAppendBlobFromLocalFile(containerName, appendBlobName, appendFileName, function (err, blob) {
           assert.equal(err, null);
           assert.equal(blob.appendOffset, 0);
@@ -2213,7 +2213,7 @@ describe('blob-uploaddownload-tests', function () {
         });
       });   
   
-      it('should work with speed summary', function (done) {
+      it.skip('should work with speed summary', function (done) {
         var speedSummary = blobService.createAppendBlobFromLocalFile(containerName, appendBlobName, appendFileName, function (err) {
           assert.equal(err, null);
           
@@ -2228,7 +2228,7 @@ describe('blob-uploaddownload-tests', function () {
         });
       });
       
-      it('should set content md5', function (done) {
+      it.skip('should set content md5', function (done) {
         var options = { storeBlobContentMD5 : true };
         
         blobService.createAppendBlobFromLocalFile(containerName, appendBlobName, appendFileName, options, function (err) {
@@ -2242,7 +2242,7 @@ describe('blob-uploaddownload-tests', function () {
         });
       });
       
-      it('should overwrite the existing append blob', function (done) {
+      it.skip('should overwrite the existing append blob', function (done) {
         var options = { storeBlobContentMD5 : true };
         
         blobService.createAppendBlobFromLocalFile(containerName, appendBlobName, appendFileName, options, function (err) {
@@ -2273,7 +2273,7 @@ describe('blob-uploaddownload-tests', function () {
         });
       });
       
-      it('should work with zero size file', function (done) {
+      it.skip('should work with zero size file', function (done) {
         uploadOptions.storeBlobContentMD5 = true;
         blobService.createAppendBlobFromLocalFile(containerName, appendBlobName, zeroSizeFileName, uploadOptions, function (err) {
           assert.equal(err, null);
@@ -2281,7 +2281,7 @@ describe('blob-uploaddownload-tests', function () {
         });
       });
       
-      it('should work with not existing file', function (done) {
+      it.skip('should work with not existing file', function (done) {
         blobService.createAppendBlobFromLocalFile(containerName, appendBlobName, notExistFileName, uploadOptions, function (err) {
           assert.notEqual(err, null);
           assert.equal(path.basename(err.path), notExistFileName);
@@ -2294,7 +2294,7 @@ describe('blob-uploaddownload-tests', function () {
         });
       });
   
-      it('should work with metadata', function(done) {
+      it.skip('should work with metadata', function(done) {
         var options = {
           storeBlobContentMD5 : true,
           metadata: { color: 'blue' }
@@ -2313,7 +2313,7 @@ describe('blob-uploaddownload-tests', function () {
         });
       });
   
-      runOrSkip('should download a range of append blob to local file', function (done) {
+      it.skip('should download a range of append blob to local file', function (done) {
         var blobName = testutil.generateId(blobNamesPrefix, blobNames, suite.isMocked);
         var fileNameSource = testutil.generateId('getAppendBlobRangeLocal', [], suite.isMocked) + '.test';
         var fileSize = 97 * 1024 * 1024;  // Don't be a multiple of 4MB to cover more scenarios
@@ -2362,7 +2362,7 @@ describe('blob-uploaddownload-tests', function () {
         });
       });
       
-      it('should work with basic file stream', function (done) {
+      it.skip('should work with basic file stream', function (done) {
         uploadOptions.storeBlobContentMD5 = true;
         uploadOptions.useTransactionalMD5 = true;
         blobService.createAppendBlobFromStream(containerName, appendBlobName, stream, len, uploadOptions, function (err, blob) {
@@ -2383,7 +2383,7 @@ describe('blob-uploaddownload-tests', function () {
         });
       });
       
-      it('should work with contentMD5 in options', function (done) {
+      it.skip('should work with contentMD5 in options', function (done) {
         var options = {
           contentSettings: {
             contentMD5 : appendBlobContentMD5
@@ -2400,7 +2400,7 @@ describe('blob-uploaddownload-tests', function () {
         });
       });
       
-      it('should work with the speed summary in options', function (done) {
+      it.skip('should work with the speed summary in options', function (done) {
         var speedSummary = new azure.BlobService.SpeedSummary();
         var options = {
           speedSummary : speedSummary
@@ -2415,7 +2415,7 @@ describe('blob-uploaddownload-tests', function () {
         });
       });
       
-      it('should work with content type', function (done) {
+      it.skip('should work with content type', function (done) {
         var blobOptions = { contentSettings: { contentType: 'text' }};
         
         blobService.createAppendBlobFromStream(containerName, appendBlobName, rfs.createReadStream(appendFileName), fileText.length, blobOptions, function (uploadError, blobResponse, uploadResponse) {
@@ -2438,7 +2438,7 @@ describe('blob-uploaddownload-tests', function () {
         });
       });
       
-      runOrSkip('should work with stream size which is a part of the read stream', function (done) {
+      it.skip('should work with stream size which is a part of the read stream', function (done) {
         var options = {
           storeBlobContentMD5: true,
           useTransactionalMD5: true
@@ -2479,7 +2479,7 @@ describe('blob-uploaddownload-tests', function () {
         });
       });
   
-      runOrSkip('should download a range of append blob to stream', function (done) {
+      it.skip('should download a range of append blob to stream', function (done) {
         var blobName = testutil.generateId(blobNamesPrefix, blobNames, suite.isMocked);
         var fileNameSource = testutil.generateId('getAppendBlobRangeStreamLocal', [], suite.isMocked) + '.test';
         var fileSize = 97 * 1024 * 1024;  // Don't be a multiple of 4MB to cover more scenarios
@@ -2508,7 +2508,7 @@ describe('blob-uploaddownload-tests', function () {
   }
 
   describe('createAppendBlobFromText', function () {
-    it('should work for small size from text', function (done) {
+    it.skip('should work for small size from text', function (done) {
       var blobName = testutil.generateId(blobNamesPrefix, blobNames, suite.isMocked) + ' a';
       var blobText = 'Hello World';
       
@@ -2528,7 +2528,7 @@ describe('blob-uploaddownload-tests', function () {
       });
     });
     
-    it('should store md5', function (done) {
+    it.skip('should store md5', function (done) {
       var blobName = testutil.generateId(blobNamesPrefix, blobNames, suite.isMocked) + ' a';
       var blobText = 'Hello World';
       var blobMD5 = azureutil.getContentMd5(blobText);
@@ -2554,7 +2554,7 @@ describe('blob-uploaddownload-tests', function () {
       });
     });
     
-    it('should work with access condition', function (done) {
+    it.skip('should work with access condition', function (done) {
       var blobName = testutil.generateId(blobNamesPrefix, blobNames, suite.isMocked);
       var blobText = 'hello';
       
@@ -2584,7 +2584,7 @@ describe('blob-uploaddownload-tests', function () {
         });
       });
   
-      it('should work with basic file', function (done) {
+      it.skip('should work with basic file', function (done) {
         appendBlobBuffer.fill(1);
         writeFile(appendFileName, appendBlobBuffer);
   
@@ -2621,7 +2621,7 @@ describe('blob-uploaddownload-tests', function () {
         });
       });
   
-      it('should append from stream', function (done) {
+      it.skip('should append from stream', function (done) {
         appendBlobBuffer.fill(1);
         writeFile(appendFileName, appendBlobBuffer);
   
@@ -2660,7 +2660,7 @@ describe('blob-uploaddownload-tests', function () {
         });
       }); 
       
-      it('should append from stream with stream length is part of the stream', function (done) {
+      it.skip('should append from stream with stream length is part of the stream', function (done) {
         appendBlobBuffer.fill(1);
         writeFile(appendFileName, appendBlobBuffer);
   
@@ -2710,7 +2710,7 @@ describe('blob-uploaddownload-tests', function () {
       });
     });
 
-    skipBrowser('should append plain text', function (done) {
+    it.skip('should append plain text', function (done) {
       appendBlobBuffer.fill(1);
       writeFile(appendFileName, appendBlobBuffer);
 
@@ -2746,7 +2746,7 @@ describe('blob-uploaddownload-tests', function () {
     describe('getAppendBlobToFile', function () {
       var appendBlobName = 'appendblob-test-getblob';
       
-      it('should work with basic append blob', function (done) {
+      it.skip('should work with basic append blob', function (done) {
         appendBlobContentMD5 = writeFile(appendFileName, fileText);
         uploadOptions.storeBlobContentMD5 = true;
         blobService.createAppendBlobFromLocalFile(containerName, appendBlobName, appendFileName, uploadOptions, function (err) {
@@ -2768,7 +2768,7 @@ describe('blob-uploaddownload-tests', function () {
         });
       });
       
-      it('should calculate content md5', function (done) {
+      it.skip('should calculate content md5', function (done) {
         appendBlobContentMD5 = writeFile(appendFileName, fileText);
         uploadOptions.storeBlobContentMD5 = true;
         blobService.createAppendBlobFromLocalFile(containerName, appendBlobName, appendFileName, uploadOptions, function (err) {
@@ -3040,7 +3040,7 @@ describe('blob-uploaddownload-tests', function () {
         });
       });
       
-      it('should work with basic stream for append blob', function(done) {
+      it.skip('should work with basic stream for append blob', function(done) {
         var blobName = testutil.generateId(blobNamesPrefix, blobNames, suite.isMocked);
         var fileNameTarget = testutil.generateId('createWriteStreamToAppendBlob', [], suite.isMocked) + '.appendtest';
         var length = 2 * 1024 * 1024;

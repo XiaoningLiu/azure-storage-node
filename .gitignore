@@ -41,6 +41,11 @@ coverage
 # Tests artefacts
 fileservice_test_*
 blobservice_test.tmp
+*.test
+*.tmp
+*.appendtest
+*.pagetest
+*.blocktest
 
 # Browserify bundle scripts
 browser/bundle
