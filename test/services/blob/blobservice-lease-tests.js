@@ -380,7 +380,7 @@ describe('BlobServiceLeasing', function () {
   //   });
   // });
 
-  describe('leaseWithResizePageBlob', function () {
+  describe.skip('leaseWithResizePageBlob', function () {
     it('should work without options specified', function (done) {
       var tempAppendBlobName = suite.getName(blobNamesPrefix).toLowerCase();
 

@@ -870,7 +870,7 @@ describe('BlobService', function () {
         });
       });
 
-      it('PageBlobResize', function (done) {
+      it.skip('PageBlobResize', function (done) {
         var blobName = testutil.generateId(blobNamesPrefix, blobNames, suite.isMocked);
 
         blobService.createPageBlob(containerName, blobName, 1024, function(createErr) {
@@ -2038,7 +2038,7 @@ describe('BlobService', function () {
     });
   });
 
-  skipMockAndBrowser('maximumExecutionTime should work while uploading big blobs', function (done) {
+  it.skip('maximumExecutionTime should work while uploading big blobs', function (done) {
     var containerName = testutil.generateId(containerNamesPrefix, containerNames, suite.isMocked);
     var blobName = testutil.generateId(blobNamesPrefix, blobNames, suite.isMocked);
 

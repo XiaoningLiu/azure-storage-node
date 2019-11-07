@@ -64,7 +64,7 @@ describe('BlobServiceUploadDownloadScale', function () {
   });
   
   describe('file scale test', function () {
-    var apis = ['createBlockBlobFromLocalFile', 'createPageBlobFromLocalFile', /*'createAppendBlobFromLocalFile'*/];
+    var apis = ['createBlockBlobFromLocalFile', /*'createPageBlobFromLocalFile', 'createAppendBlobFromLocalFile'*/];
     var sizes = [0, 1024, 1024 * 1024, 4 * 1024 * 1024, 32 * 1024 * 1024, 64 * 1024 * 1024, 148 * 1024 * 1024 - 512, 148 * 1024 * 1024, 148 * 1024 * 1024 + 512];
     for (var i = 0; i < apis.length; i++) {
       for (var j = 0; j < sizes.length; j++) {

@@ -286,7 +286,7 @@ describe('blob-uploaddownload-tests', function () {
     });
   });
   
-  describe('blob-piping-tests', function() {
+  describe.skip('blob-piping-tests', function() {
     skipMockAndBrowser('should be able to upload block blob from piped stream', function (done) { 
       var blobName = testutil.generateId(blobNamesPrefix, blobNames, suite.isMocked);
       var fileNameTarget = testutil.generateId('uploadBlockBlobPiping', [], suite.isMocked) + '.blocktest';
@@ -607,7 +607,7 @@ describe('blob-uploaddownload-tests', function () {
       });
     });
 
-    skipBrowser('getPageRanges', function (done) {
+    it.skip('getPageRanges', function (done) {
       var blobName = testutil.generateId(blobNamesPrefix, blobNames, suite.isMocked);
       var fileNameSource = testutil.generateId('getPageRanges', [], suite.isMocked) + '.test';
 
@@ -1142,7 +1142,7 @@ describe('blob-uploaddownload-tests', function () {
       });
     });
     
-    skipMockAndBrowser('PageBlobDownloadWithAndWithoutMD5Validation', function (done) {
+    it.skip('PageBlobDownloadWithAndWithoutMD5Validation', function (done) {
       var blobName = testutil.generateId(blobNamesPrefix, blobNames, suite.isMocked);
       var fileNameSource = testutil.generateId('getPageBlobMD5', [], suite.isMocked) + '.test';
 
@@ -1222,7 +1222,7 @@ describe('blob-uploaddownload-tests', function () {
       });
     });
   
-    skipMockAndBrowser('PageBlobDownloadRangeValidation', function (done) {
+    it.skip('PageBlobDownloadRangeValidation', function (done) {
       var blobName = testutil.generateId(blobNamesPrefix, blobNames, suite.isMocked);
       var fileNameSource = testutil.generateId('getPageBlobRange', [], suite.isMocked) + '.test';
 
@@ -1828,7 +1828,7 @@ describe('blob-uploaddownload-tests', function () {
       });
     });
   
-    describe('createPageBlobFromLocalFile', function() {
+    describe.skip('createPageBlobFromLocalFile', function() {
       var zeroFileContentMD5;
       before(function (done) {
         pageBlobBuffer.fill(1);
@@ -2089,7 +2089,7 @@ describe('blob-uploaddownload-tests', function () {
       });
     });
   
-    describe('createPageBlobFromStream', function() {
+    describe.skip('createPageBlobFromStream', function() {
       //Most cases are in CreatePageBlobFromFile
       it('should work with basic file', function(done) {
         var stream = rfs.createReadStream(pageFileName);
@@ -2935,7 +2935,7 @@ describe('blob-uploaddownload-tests', function () {
       });
     });
   
-    describe('getPageBlobToFile', function() {
+    describe.skip('getPageBlobToFile', function() {
       var pageBlobName = 'pageblob-test-getblob';
   
       it('should work with basic page blob', function(done) {
@@ -3020,7 +3020,7 @@ describe('blob-uploaddownload-tests', function () {
         done();
       });
       
-      it('should work with basic stream for page blob', function(done) {
+      it.skip('should work with basic stream for page blob', function(done) {
         var blobName = testutil.generateId(blobNamesPrefix, blobNames, suite.isMocked);
         var fileNameTarget = testutil.generateId('createWriteStreamToPageBlob', [], suite.isMocked) + '.pagetest';
         var length = 2 * 1024 * 1024;
