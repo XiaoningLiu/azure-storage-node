@@ -996,14 +996,14 @@ describe('BlobContainer', function () {
                   blobs.length = 0;
                   listBlobDirectoriesWithPrefix(prefix, null, null, function() {
                     assert.equal(blobs.length, 1);
-                    assert.equal(blobs[0].name, blobPrefix3);
+                    assert.equal(blobs[0].name, blobPrefix2);
 
                     prefix = blobs[0].name;
                     blobs.length = 0;
                     listBlobs(prefix, null, null, function (blobErr) {
                       assert.equal(blobErr, null);
                       assert.equal(blobs.length, 1);
-                      assert.equal(blobs[0].name, blobName3);
+                      assert.equal(blobs[0].name, blobName2);
                       done();
                     });
                   });
